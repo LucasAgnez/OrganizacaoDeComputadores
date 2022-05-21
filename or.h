@@ -1,11 +1,13 @@
 #include "systemc.h"
 
 SC_MODULE(or) {
-	sc_in<bool> A, B;
-	sc_out<bool> S;
+	sc_in<sc_uint<32>> A, B;
+	sc_out<sc_uint<32>> S;
 
 	void do_or() {
-		S.write( (A.read() | B.read()) );
+		for(int i=; i<32; i++){
+			S[i].write( (A[i].read() | B[i].read()) );
+		}
 	}
 
 	SC_CTOR(or) {
