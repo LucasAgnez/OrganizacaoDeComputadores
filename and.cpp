@@ -1,7 +1,7 @@
 #include "systemc.h"
 
 SC_MODULE(and) {
-	sc_out<sc_uint<32>> A, B;
+	sc_in<sc_uint<32>> A, B;
 	sc_out<sc_uint<32>> CO;
 
 	void do_and() {
