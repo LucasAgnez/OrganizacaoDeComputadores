@@ -1,8 +1,8 @@
 #include "systemc.h"
 
 SC_MODULE(equals) {
-	sc_in<bool> A, B;
-	sc_out<bool> S;
+	sc_out<sc_uint<4> > A, B;
+	sc_out<sc_uint<4> > S;
 
 	void do_equals() {
 		if (A == B){
