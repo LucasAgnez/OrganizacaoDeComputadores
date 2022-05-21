@@ -1,11 +1,13 @@
 #include "systemc.h"
 
 SC_MODULE(not) {
-	sc_in<bool> A;
-	sc_out<bool> S;
+	sc_out<sc_uint<32>> A;
+	sc_out<sc_uint<32>> S;
 
 	void do_not() {
-		S.write(~(A.read() ));
+		for(int i=0; i<32; i++){
+			S[i].write(~(A[i].read() ));
+		}
 	}
 
 	SC_CTOR(not) {
