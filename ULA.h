@@ -10,57 +10,39 @@ SC_MODULE(ULA) {
     
 
     void do_ula() {
-      zero.write("0");
+      
       switch(OP.read()) {
-        case 0000: {
+        case 0: {
           S.write(A.read() & B.read());
             break;
         }
-        case 0001: {
+        case 1: {
           S.write(A.read() | B.read());
             break;
         }
-        case 0010: {
+        case 2: {
           S.write(A.read() ^ B.read());
             break;
         }
-        case 0011: {
+        case 3: {
           S.write(~A.read());
             break;
         }
-        case 0100: {
-            if (A == B){
-                zero.write("1");
-            }
-        }
-        case 0101: {
+        case 4: {
           S.write(A.read() + B.read());
             break;
         }
-        case 0110: {
+        case 5: {
           S.write(A.read() - B.read());
             break;
         }
-        case 0111: {
-            \\leitura
-            break;
-        }
-        case 1000: {
-            \\escrita
-            break;
-        }
-        case 1001: {
-            \\salto inc
-            break;
-        }  
-        case 1010: {
-            \\salto neg
-            break;
-        }
-        case 1011: {
-            \\salto zero
-            break;
-        }
+      }
+      
+      if(S.read() == 0){
+        zero.write("1");
+      }
+      else {
+        zero.write("0");
       }
     }
 
