@@ -1,5 +1,5 @@
 #include "systemc.h"
-#include "and.cpp"
+#include "and.h"
 
 int sc_main (int argc, char* argv[]) {
 	sc_signal<sc_lv<4>>  x, y;
