@@ -1,8 +1,8 @@
 #include "systemc.h"
 
 SC_MODULE(and) {
-	sc_in<sc_lv<4>> A, B;
-	sc_out<sc_lv<4>> S;
+	sc_in<sc_lv<32>> A, B;
+	sc_out<sc_lv<32>> S;
 	
 	void do_and() {
 		S.write( (A.read() & B.read()) );
