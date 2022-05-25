@@ -1,6 +1,8 @@
 #include "systemc.h"
 
 SC_MODULE(CTR) {
+  	sc_in_clk clock;
+  
     sc_in<sc_uint<4>> OP;
     sc_out<sc_uint<1>> regWrite;
   	sc_out<sc_uint<1>> memToReg;
@@ -113,6 +115,6 @@ SC_MODULE(CTR) {
 
     SC_CTOR(CTR) {
         SC_METHOD(do_ctr);
-        sensitive << OP;
+        sensitive << clock.pos();
     }
 };
