@@ -1,5 +1,5 @@
 #include "systemc.h"
-#include "ULA.h"
+#include "ALU.h"
 #include "ctr.h"
 
 int sc_main (int argc, char* argv[]) {
@@ -10,7 +10,7 @@ int sc_main (int argc, char* argv[]) {
   	sc_signal<sc_uint<1>> z;
     sc_signal<sc_uint<32>>  s;
   
-    ULA a("a");
+    ALU a("a");
     a.A(x);
     a.B(y);
     a.S(s);
