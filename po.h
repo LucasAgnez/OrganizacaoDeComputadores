@@ -1,5 +1,5 @@
 #include "systemc.h"
-#include "ULA.h"
+#include "ALU.h"
 #include "ctr.h"
 #include "reg_mem.h"
 #include "inst_mem.h"
