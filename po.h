@@ -26,7 +26,7 @@ SC_MODULE(PO) {
         a.A(x);
         a.OP(ulaop);
         a.B(y);
-        a.S(s);'
+        a.S(s);
         a.zero(zero);
 
         sc_out<sc_uint<1>> regWrite;
@@ -44,7 +44,7 @@ SC_MODULE(PO) {
         ctr.memRead(memRead);
         ctr.aluSrc(aluSrc);
 
-        ctrop.write(inst_data.
+        // ctrop.write(inst_data.
 
         sc_in<sc_uint<5>> data_address;
         sc_in<sc_uint<1>> mem_write;
