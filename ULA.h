@@ -1,6 +1,8 @@
 #include "systemc.h"
 
 SC_MODULE(ULA) {
+  	sc_in_clk clock; 
+  
     sc_in<sc_uint<32>> A;
     sc_in<sc_uint<32>> B;
     sc_in<sc_uint<4>> OP;
@@ -48,6 +50,6 @@ SC_MODULE(ULA) {
 
     SC_CTOR(ULA) {
         SC_METHOD(do_ula);
-        sensitive << A << B << OP;
+        sensitive << clock.pos();
     }
 };
