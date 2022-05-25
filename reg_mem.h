@@ -1,6 +1,8 @@
 #include "systemc.h"
 
 SC_MODULE(REG_MEM) {
+  	sc_in_clk clock;
+  
 	sc_in<sc_uint<5>> r1_address;
 	sc_in<sc_uint<5>> r2_address;
 	
@@ -30,9 +32,9 @@ SC_MODULE(REG_MEM) {
 
 	SC_CTOR(REG_MEM) {
 		SC_METHOD(do_read)
-			sensitive << r1_address << r2_address;
+			sensitive << clock.pos();
 		SC_METHOD(do_write)
-			sensitive << write_address << write_data << reg_write;
+			sensitive << clock.pos();
 	}
 
 };
