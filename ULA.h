@@ -1,6 +1,6 @@
 #include "systemc.h"
 
-SC_MODULE(ULA) {
+SC_MODULE(ALU) {
   	sc_in_clk clock; 
   
     sc_in<sc_uint<32>> A;
@@ -11,7 +11,7 @@ SC_MODULE(ULA) {
     
     
 
-    void do_ula() {
+    void do_alu() {
       
       switch(OP.read()) {
         case 0: {
@@ -48,8 +48,8 @@ SC_MODULE(ULA) {
       }
     }
 
-    SC_CTOR(ULA) {
-        SC_METHOD(do_ula);
+    SC_CTOR(ALU) {
+        SC_METHOD(do_alu);
         sensitive << clock.pos();
     }
 };
