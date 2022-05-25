@@ -55,15 +55,17 @@ SC_MODULE(PO) {
     alu.B(alu_y);
     alu.S(alu_s);
     alu.zero(alu_zero);
+    alu.clock(clock);
   }
   
   void ctr_ini() {
-  	ctr.OP(ctrop);
+  	ctr.OP(ctr_ctrop);
     ctr.regWrite(ctr_regWrite);
     ctr.memToReg(ctr_memToReg);
     ctr.memWrite(ctr_memWrite);
     ctr.memRead(ctr_memRead);
     ctr.aluSrc(ctr_aluSrc);
+    ctr.clock(clock);
   }
 
   void data_mem_ini() {
@@ -72,6 +74,7 @@ SC_MODULE(PO) {
     dm.mem_read(data_mem_mem_read);
     dm.write_data(data_mem_write_data);
     dm.data_value(data_mem_data_value);
+    dm.clock(clock);
   }
 
   void data_reg_ini() {
@@ -82,13 +85,19 @@ SC_MODULE(PO) {
     rm.write_data(reg_mem_write_data);
     rm.r1_value(reg_mem_r1_value);
     rm.r2_value(reg_mem_r2_value);
+    rm.clock(clock);
   }
   
   
   
     void do_po() {
+      //Pega os primeiros 4 bits de instrução (opcode)
+      ctr_ctrop.write(inst_mem_data);
+      
       //inst_address.write(0);
       // ctrop.write(inst_data.  
+      
+      inst_mem_adress.write(inst_mem_adress.read() + 1);
     }
 
     SC_CTOR(PO) {
