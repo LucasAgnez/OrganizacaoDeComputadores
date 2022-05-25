@@ -8,33 +8,33 @@
 SC_MODULE(PO) {
 
     void do_po() {
-        sc_in<sc_uint<5>> inst_address;
-        sc_out<sc_uint<24>> inst_data;
+        sc_signal<sc_uint<5>> inst_address;
+        sc_signal<sc_uint<24>> inst_data;
 
         INST_MEM inst_mem("INST_MEM");
         inst_mem.inst_address(inst_address);
         inst_mem.inst_data(inst_data);
         inst_address.write(0);
 
-        sc_in<sc_uint<32>> x;
-        sc_in<sc_uint<32>> y;
-        sc_in<sc_uint<4>> ulaop;
-        sc_out<sc_uint<32>> s;
-        sc_out<sc_uint<1>> zero;
+        sc_signal<sc_uint<32>> x;
+        sc_signal<sc_uint<32>> y;
+        sc_signal<sc_uint<4>> ulaop;
+        sc_signal<sc_uint<32>> s;
+        sc_signal<sc_uint<1>> zero;
 
-        ULA a("ULA");
+        ALU a("ALU");
         a.A(x);
         a.OP(ulaop);
         a.B(y);
         a.S(s);
         a.zero(zero);
 
-        sc_out<sc_uint<1>> regWrite;
-        sc_out<sc_uint<1>> memToReg;
-        sc_out<sc_uint<1>> memWrite;
-        sc_out<sc_uint<1>> memRead;
-        sc_out<sc_uint<1>> aluSrc;
-        sc_in<sc_uint<4>> ctrop;
+        sc_signal<sc_uint<1>> regWrite;
+        sc_signal<sc_uint<1>> memToReg;
+        sc_signal<sc_uint<1>> memWrite;
+        sc_signal<sc_uint<1>> memRead;
+        sc_signal<sc_uint<1>> aluSrc;
+        sc_signal<sc_uint<4>> ctrop;
 
         CTR ctr("CTR");
         ctr.OP(ctrop);
@@ -46,11 +46,11 @@ SC_MODULE(PO) {
 
         // ctrop.write(inst_data.
 
-        sc_in<sc_uint<5>> data_address;
-        sc_in<sc_uint<1>> mem_write;
-        sc_in<sc_uint<1>> mem_read;
-        sc_in<sc_uint<32>> write_data;
-        sc_out<sc_uint<32>> data_value;
+        sc_signal<sc_uint<5>> data_address;
+        sc_signal<sc_uint<1>> mem_write;
+        sc_signal<sc_uint<1>> mem_read;
+        sc_signal<sc_uint<32>> write_data;
+        sc_signal<sc_uint<32>> data_value;
 
         DATA_MEM dm("DATA MEM");
         dm.data_address(data_address);
@@ -60,13 +60,13 @@ SC_MODULE(PO) {
         dm.data_value.(data_value);
 
         
-        sc_in<sc_uint<5>> r1_address;
-        sc_in<sc_uint<5>> r2_address;
-        sc_in<sc_uint<1>> reg_write;
-        sc_in<sc_uint<5>> write_address;
-        sc_in<sc_uint<32>> write_data;
-        sc_out<sc_uint<32>> r1_value;
-        sc_out<sc_uint<32>> r2_value;
+        sc_signal<sc_uint<5>> r1_address;
+        sc_signal<sc_uint<5>> r2_address;
+        sc_signal<sc_uint<1>> reg_write;
+        sc_signal<sc_uint<5>> write_address;
+        sc_signal<sc_uint<32>> write_data;
+        sc_signal<sc_uint<32>> r1_value;
+        sc_signal<sc_uint<32>> r2_value;
         
         REG_MEM rm("REG MEM");
         rm.r1_address(r1_address);
@@ -85,5 +85,3 @@ SC_MODULE(PO) {
         sensitive << A << B << OP;
     }
 };
-
-
