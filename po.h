@@ -96,11 +96,81 @@ SC_MODULE(PO) {
       sc_uint<4> opcode = inst_mem_data.read() >> 20;
       ctr_ctrop.write(opcode);
       
-      cout << opcode << endl;
+      cout << "opcode: " << opcode << endl;
+      cout << "clock: " << clock << endl;
+      
+      
+      switch opcode {
+        case 7: {
+          sc_uint<5> rt = inst_mem_data.read() >> 15;
+          sc_uint<5> rs = inst_mem_data.read() >> 10;
+          sc_uint<10> desloc = inst_mem_data.read() >> 5;
+          break;
+        }
+        case 8: {
+          sc_uint<5> rt = inst_mem_data.read() >> 15;
+          sc_uint<5> rs = inst_mem_data.read() >> 10;
+          sc_uint<10> desloc = inst_mem_data.read() >> 5;
+          break;
+        }
+        case 9: {
+          sc_uint<20> addres = inst_mem_data.read() >> 4;
+          break;
+        }
+        case 10: {
+          sc_uint<20> addres = inst_mem_data.read() >> 4;
+
+          break;
+        }
+        case 11: {
+          sc_uint<20> addres = inst_mem_data.read() >> 4;
+          break;
+        } 
+        default: {
+          sc_uint<5> rt = inst_mem_data.read() >> 15;
+          sc_uint<5> rs = inst_mem_data.read() >> 10;
+          sc_uint<5> rd = inst_mem_data.read() >> 5;
+          break;
+        }
+      } 
+      
+      
+      
+      
      
       
       //-------DATA MEMORY
-      //data_address.
+      // Seta entradas de controle do banco de dados
+      data_mem_mem_read.write(ctr_memRead.read());
+      data_mem_mem_write.write(ctr_memWrite.read());
+      
+      cout << "ctr_memRead: " << ctr_memRead.read() << endl;
+      
+      //Pega bits 15-11 da palavra de instrução(rs, tipo I) 
+      sc_uint<5> inst_dm_address = inst_mem_data.read() >> 10;
+      data_mem_data_address.write(inst_dm_address);
+      cout << "inst_dm_address: " << inst_dm_address << endl;
+      
+      
+      
+      //-------REGISTERS BANK
+      // Seta entradas de controle do banco de registradores
+      reg_mem_reg_write.write(ctr_regWrite.read());
+      
+      //Pega bits 20-16 da palavra de instrução (rt, tipo I)
+      sc_uint<5> inst_dr_write_address = inst_mem_data.read() >> 15;
+      reg_mem_write_address.write(inst_dr_write_address);
+      cout << "inst_dr_write_address: " << inst_dr_write_address << endl;
+      
+      reg_mem_write_data.write(data_mem_data_value.read());
+      
+      
+      //TESTE
+      reg_mem_r1_address.write(1);
+      
+      cout << "valor recuperado do banco: " + reg_mem_r1_value.read() << endl;
+      
+       
       
       
       //PC: Aumenta endereço da próxima instrução em uma unidade(4 bytes)
@@ -120,8 +190,7 @@ SC_MODULE(PO) {
       reg_mem_ini();
       
       
-      
       SC_METHOD(do_po);
-        sensitive << clock.pos();
+        sensitive << clock.neg();
     }
 };
