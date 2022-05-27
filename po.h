@@ -92,18 +92,19 @@ SC_MODULE(PO) {
   
   
     void do_po() {
-      //Pega os primeiros 4 bits de instrução (opcode)
+      //Pega os primeiros 4 bits de instrução (opcode) e manda para o Controle
       sc_uint<4> opcode = inst_mem_data.read() >> 20;
-      cout << opcode << endl;
-      
       ctr_ctrop.write(opcode);
       
-      //inst_address.write(0);
-      // ctrop.write(inst_data.  
+      cout << opcode << endl;
+     
       
+      //-------DATA MEMORY
+      //data_address.
+      
+      
+      //PC: Aumenta endereço da próxima instrução em uma unidade(4 bytes)
       inst_mem_adress.write(inst_mem_adress.read() + 1);
-      
-      
     }
 
     SC_CTOR(PO) {
