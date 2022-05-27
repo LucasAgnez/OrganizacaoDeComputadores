@@ -11,6 +11,7 @@ SC_MODULE(CTR) {
   	sc_out<sc_uint<1>> aluSrc;
   
     void do_ctr() {
+      cout << "OPPPPPP " << OP.read() << endl;
       
       switch(OP.read()) {
         case 0: {
@@ -73,7 +74,7 @@ SC_MODULE(CTR) {
           regWrite.write(1);
           memToReg.write(0);
           memWrite.write(0);
-          memRead.write(0);
+          memRead.write(1);
           aluSrc.write(1);
           break;
         }
