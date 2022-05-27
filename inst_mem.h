@@ -10,14 +10,14 @@ SC_MODULE(INST_MEM) {
 
 
     void do_read() {
-    do_fetch();
-    inst_data.write(instructions[inst_address.read()]);
+      do_fetch();
+      inst_data.write(instructions[inst_address.read()]);
     }
   
     void do_fetch() {
-      instructions[0] = 228645379;
-        instructions[1] = 218645379;
-        instructions[2] = 218645379;
+      instructions[0] = 7372800;
+      instructions[1] = 2097151;
+      instructions[2] = 218645379;
     }
 
     SC_CTOR(INST_MEM) {
