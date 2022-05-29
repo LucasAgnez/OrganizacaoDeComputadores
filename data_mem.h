@@ -8,11 +8,11 @@ SC_MODULE(DATA_MEM) {
 	sc_in<sc_uint<1>> mem_write;
 	sc_in<sc_uint<1>> mem_read;
   
-  	sc_in<sc_uint<32>> write_data;
+  	sc_in<sc_uint<5>> write_data;
   
-	sc_out<sc_uint<32>> data_value;
+	sc_out<sc_uint<5>> data_value;
 
-	sc_uint<32> data[128];
+	sc_uint<5> data[128];
 
 
     void do_read() {
