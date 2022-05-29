@@ -1,6 +1,6 @@
 #include "systemc.h"
 
-SC_MODULE(ALU) {
+SC_MODULE(alu) {
   	sc_in_clk clock; 
   
     sc_in<sc_uint<5>> A;
@@ -48,7 +48,7 @@ SC_MODULE(ALU) {
       }
     }
 
-    SC_CTOR(ALU) {
+    SC_CTOR(alu) {
         SC_METHOD(do_alu);
         sensitive << clock.pos();
     }
