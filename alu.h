@@ -3,10 +3,10 @@
 SC_MODULE(ALU) {
   	sc_in_clk clock; 
   
-    sc_in<sc_uint<32>> A;
-    sc_in<sc_uint<32>> B;
+    sc_in<sc_uint<5>> A;
+    sc_in<sc_uint<5>> B;
     sc_in<sc_uint<4>> OP;
-    sc_out<sc_uint<32>> S;
+    sc_out<sc_uint<5>> S;
     sc_out<sc_uint<1>> zero;
     
     
