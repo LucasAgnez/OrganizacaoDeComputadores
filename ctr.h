@@ -4,16 +4,17 @@ SC_MODULE(CTR) {
   	sc_in_clk clock;
   
     sc_in<sc_uint<4>> OP;
-    sc_out<sc_uint<1>> regWrite;
+    
+  	sc_out<sc_uint<1>> regWrite;
   	sc_out<sc_uint<1>> memToReg;
   	sc_out<sc_uint<1>> memWrite;
   	sc_out<sc_uint<1>> memRead;
   	sc_out<sc_uint<1>> aluSrc;
   	sc_out<sc_uint<1>> regDst;
   	sc_out<sc_uint<1>> branch;
+  	
   
     void do_ctr() {
-      cout << "OPPPPPP " << OP.read() << endl;
       
       switch(OP.read()) {
         case 0: {
@@ -98,7 +99,7 @@ SC_MODULE(CTR) {
         }
         case 8: {
           regWrite.write(0);
-          //memToReg.write();
+          memToReg.write(0); //DC
           memWrite.write(1);
           memRead.write(0);
           aluSrc.write(1);
@@ -108,32 +109,41 @@ SC_MODULE(CTR) {
         }
         case 9: {
           regWrite.write(0);
-          //memToReg.write();
-          //memWrite.write(0);
-          //memRead.write(0);
-          //aluSrc.write(0);
-          //regDst.write(0);
+          memToReg.write(0); //DC
+          memRead.write(0); //DC
+          aluSrc.write(0); //DC
+          regDst.write(0); //DC
           branch.write(1);
           break;
         }
         case 10: {
-          //regWrite.write(0);
-          //memToReg.write();
-          //memWrite.write(0);
-          //memRead.write(0);
+          regWrite.write(0);
+          memToReg.write(0); //DC
+          memWrite.write(0); //DC
+          memRead.write(0); //DC
           aluSrc.write(0);
-          //regDst.write(0);
+          regDst.write(0); //DC
           branch.write(1);
           break;
         }
         case 11: {
-          //regWrite.write(0);
-          //memToReg.write();
-          //memWrite.write(0);
-          //memRead.write(0);
+          regWrite.write(0);
+          memToReg.write(0); //DC
+          memWrite.write(0); //DC
+          memRead.write(0); //DC
           aluSrc.write(0);
-          //regDst.write(0);
+          regDst.write(0); //DC
           branch.write(1);
+          break;
+        }
+        default: {
+          regWrite.write(0); //DC
+          memToReg.write(0); //DC
+          memWrite.write(0); //DC
+          memRead.write(0); //DC
+          aluSrc.write(0); //DC
+          regDst.write(0); //DC
+          branch.write(0); //DC
           break;
         }
       }
@@ -141,14 +151,14 @@ SC_MODULE(CTR) {
     }
 
     SC_CTOR(CTR) {
-      OP.write(0);
-      regWrite.write(0);
-      memToReg.write(0);
-      memWrite.write(0);
-      memRead.write(0);
-      aluSrc.write(0);
-      regDst.write(0);
-      branch.write(0);
+      //OP.write(0);
+      //regWrite.write(0);
+//       memToReg.write(0);
+//       memWrite.write(0);
+//       memRead.write(0);
+//       aluSrc.write(0);
+//       regDst.write(0);
+//       branch.write(0);
       
       SC_METHOD(do_ctr);
         sensitive << clock.pos();
