@@ -15,13 +15,14 @@ SC_MODULE(INST_MEM) {
     }
   
     void do_fetch() {
-      instructions[0] = 7372800;
+      instructions[0] = 7373824;
       instructions[1] = 2097151;
       instructions[2] = 218645379;
     }
 
-    SC_CTOR(INST_MEM) {
-      SC_METHOD(do_read)
+  
+    SC_CTOR(INST_MEM) {      
+      SC_METHOD(do_read);
         sensitive << clock.pos();
     }
 
