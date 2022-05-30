@@ -136,8 +136,22 @@ SC_MODULE(PO) {
   BufferExMem* bff3;
   sc_signal<sc_uint<5>> bff3_reg_mem_write_address_in;
   sc_signal<sc_uint<5>> bff3_branch_inst_addres_in;
+  sc_signal<sc_uint<1>> bff3_ctr_regWrite_out;
+  sc_signal<sc_uint<1>> bff3_reg_mem_write_address_out;
+  sc_signal<sc_uint<1>> bff3_ctr_branch_out;
+  sc_signal<sc_uint<1>> bff3_alu_zero_out;
+  sc_signal<sc_uint<1>> bff3_memToReg_out;
+  sc_signal<sc_uint<5>> bff3_branch_inst_addres_out;
+
+
 
   BufferMemWb* bff4;
+  sc_signal<sc_uint<1>> bff4_ctr_memToReg_out;
+  sc_signal<sc_uint<1>> bff4_alu_s_out;
+  sc_signal<sc_uint<1>> bff4_dm_data_value_out;
+  sc_signal<sc_uint<1>> bff4_ctr_regWrite_out;
+  sc_signal<sc_uint<1>> bff4_reg_mem_write_address_out;
+
 
   void bff1_ini() {
   	bff1->instruction_in(inst_mem_data);
@@ -189,32 +203,32 @@ SC_MODULE(PO) {
     bff3->reg_mem_r2_v_in(bff2_reg_mem_r2_v_out);
     bff3->reg_mem_write_address_in(bff3_reg_mem_write_address_in);
 
-    bff3->ctr_regWrite_out(data_mem_mem_write);
-    bff3->ctr_branch_out();
+    bff3->ctr_regWrite_out(bff3_ctr_regWrite_out);
+    bff3->ctr_branch_out(bff3_ctr_branch_out);
     bff3->ctr_memRead_out(data_mem_mem_read);
-    bff3->ctr_memWrite_out();
-    bff3->ctr_memToReg_out();
-    bff3->branch_inst_addres_out();
-    bff3->alu_zero_out();
+    bff3->ctr_memWrite_out(data_mem_mem_write);
+    bff3->ctr_memToReg_out(bff3_memToReg_out);
+    bff3->branch_inst_addres_out(bff3_branch_inst_addres_out);
+    bff3->alu_zero_out(bff3_alu_zero_out);
     bff3->alu_s_out(data_mem_data_address);
     bff3->reg_mem_r2_v_out(data_mem_write_data);
-    bff3->reg_mem_write_address_out();
+    bff3->reg_mem_write_address_out(bff3_reg_mem_write_address_out);
   }
-  
+
   void bff4_ini() {
-    bff4->ctr_regWrite_in();
-    bff4->reg_mem_write_address_in(); 
-    bff4->alu_s_in();
-    bff4->dm_data_value_in();
-    bff4->ctr_regWrite_out();
-    bff4->reg_mem_write_address_out(); 
-    bff4->alu_s_out();
-    bff4->dm_data_value_out();
+    bff4->ctr_regWrite_in(bff3_ctr_regWrite_out);
+    bff4->ctr_memToReg_in(bff3_memToReg_out);
+    bff4->reg_mem_write_address_in(bff3_reg_mem_write_address_out);
+    bff4->alu_s_in(data_mem_data_address);
+    bff4->dm_data_value_in(data_mem_data_value);
+
+    bff4->ctr_regWrite_out(bff4_ctr_regWrite_out);
+    bff4->ctr_memToReg_out(bff4_ctr_memToReg_out);
+    bff4->reg_mem_write_address_out(bff4_reg_mem_write_address_out);
+    bff4->alu_s_out(bff4_alu_s_out);
+    bff4->dm_data_value_out(bff4_dm_data_value_out);
   }
 
-
-
-  inst_mem_adress;
 
 
   void decode_instruction(sc_uint<24> instruction, sc_uint<4>* opcode, sc_uint<5>* rt, sc_uint<5>* rs, sc_uint<5>* desloc_rd) {
@@ -319,46 +333,43 @@ SC_MODULE(PO) {
 
 
       //MEMORY
-
-
-
       //Data Memory
       // Seta entradas de controle do banco de dados
-      data_mem_mem_read.write(bff3.ctr_memRead);
-      data_mem_mem_write.write(bff3.ctr_memWrite);
+      data_mem_mem_read.write(data_mem_mem_read.read());
+      data_mem_mem_write.write(data_mem_mem_write.read());
 
       //cout << "ctr_memRead: " << ctr_memRead.read() << endl;
-      cout << "ctr_memRead: " << ctr_memRead.read() << endl;
+      cout << "ctr_memRead: " << data_mem_mem_read.read() << endl;
 
       //data_mem_data_address.write(bff3.alu_s);
       //data_mem_write_data.write(bff3.reg_mem_r2_v);
 
 
-      pcSrc = bff3.ctr_branch & bff3.alu_zero;
+      pcSrc = bff3_ctr_branch_out.read() & bff3_alu_zero_out.read();
 
 
 
       //BUFFER MEM/WB
-      bff4.ctr_regWrite = bff3.ctr_regWrite;
-      bff4.reg_mem_write_address = bff3.reg_mem_write_address;
-      bff4.alu_s = bff3.alu_s;
-      bff4.dm_data_value = data_mem_data_value.read();
+      //bff4.ctr_regWrite = bff3.ctr_regWrite;
+      //bff4.reg_mem_write_address = bff3.reg_mem_write_address;
+      //bff4.alu_s = bff3.alu_s;
+      //bff4.dm_data_value = data_mem_data_value.read();
 
 
 
       //WRITE BACK
-      if(ctr_memToReg.read() == 1) {
-      	 reg_mem_write_data.write(bff4.alu_s);
+      if(bff4_ctr_memToReg_out.read() == 1) {
+      	 reg_mem_write_data.write(bff4_alu_s_out.read());
       }
       else {
-      	reg_mem_write_data.write(bff4.dm_data_value);
+      	reg_mem_write_data.write(bff4_dm_data_value_out.read());
       }
 
-      reg_mem_reg_write.write(bff4.ctr_regWrite);
-      reg_mem_write_address.write(bff4.reg_mem_write_address);
+      reg_mem_reg_write.write(bff4_ctr_regWrite_out.read());
+      reg_mem_write_address.write(bff4_reg_mem_write_address_out.read());
 
       if(pcSrc == 1) {
-        inst_address.write(bff3.branch_inst_addres);
+        inst_address.write(bff3_branch_inst_addres_out.read());
         //inst_mem_adress.write(bff3.branch_inst_addres);
       }
       else {
