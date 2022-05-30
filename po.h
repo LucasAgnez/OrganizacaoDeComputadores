@@ -71,7 +71,7 @@ SC_MODULE(PO) {
   }
 
   void alu_ini() {
-    alu->OP(bff2_opcode);
+    alu->OP(bff2_opcode_out);
     alu->A(alu_x);
     alu->B(alu_y);
     alu->S(alu_s);
@@ -117,6 +117,13 @@ SC_MODULE(PO) {
   sc_signal<sc_uint<4>> bff2_opcode;
   sc_signal<sc_uint<5>> bff2_rt;
   sc_signal<sc_uint<5>> bff2_rd_desloc;
+
+  sc_signal<sc_uint<5>> bff2_next_inst_addres_out;
+  sc_signal<sc_uint<5>> bff2_rt_out;
+  sc_signal<sc_uint<5>> bff2_desloc_rd_out;
+  sc_signal<sc_uint<4>> bff2_opCode_out;
+  sc_signal<sc_uint<5>> bff2_reg_mem_r2_v_out;
+  sc_signal<sc_uint<4>> bff2_opcode_out;
   sc_signal<sc_uint<1>> bff2_ctr_regWrite;
   sc_signal<sc_uint<1>> bff2_ctr_branch;
   sc_signal<sc_uint<1>> bff2_ctr_memToReg;
@@ -127,6 +134,9 @@ SC_MODULE(PO) {
 
 
   BufferExMem* bff3;
+  sc_signal<sc_uint<5>> bff3_reg_mem_write_address_in;
+  sc_signal<sc_uint<5>> bff3_branch_inst_addres_in;
+
   BufferMemWb* bff4;
 
   void bff1_ini() {
@@ -151,12 +161,13 @@ SC_MODULE(PO) {
     bff2->ctr_memRead_in(ctr_memRead);
     bff2->ctr_aluSrc_in(ctr_aluSrc);
     bff2->ctr_regDst_in(ctr_regDst);
-    bff2->next_inst_addres_out();
-    bff2->rt_out();
-    bff2->desloc_rd_out();
-    bff2->opCode_out();
+
+    bff2->next_inst_addres_out(bff2_next_inst_addres_out);
+    bff2->rt_out(bff2_rt_out);
+    bff2->desloc_rd_out(bff2_desloc_rd_out);
+    bff2->opCode_out(bff2_opcode_out);
     bff2->reg_mem_r1_v_out(alu_x);
-    bff2->reg_mem_r2_v_out();
+    bff2->reg_mem_r2_v_out(bff2_reg_mem_r2_v_out);
     bff2->ctr_regWrite_out(bff2_ctr_regWrite);
     bff2->ctr_branch_out(bff2_ctr_branch);
     bff2->ctr_memToReg_out(bff2_ctr_memToReg);
@@ -172,21 +183,33 @@ SC_MODULE(PO) {
     bff3->ctr_memRead_in(bff2_ctr_memRead);
     bff3->ctr_memWrite_in(bff2_ctr_memWrite);
     bff3->ctr_memToReg_in(bff2_ctr_memToReg);
-    bff3->branch_inst_addres_in();
-    bff3->alu_zero_in();
-    bff3->alu_s_in();
-    bff3->reg_mem_r2_v_in();
-    bff3->reg_mem_write_address_in();
-    bff3->ctr_regWrite_out();
+    bff3->branch_inst_addres_in(bff3_branch_inst_addres_in);
+    bff3->alu_zero_in(alu_zero);
+    bff3->alu_s_in(alu_s);
+    bff3->reg_mem_r2_v_in(bff2_reg_mem_r2_v_out);
+    bff3->reg_mem_write_address_in(bff3_reg_mem_write_address_in);
+
+    bff3->ctr_regWrite_out(data_mem_mem_write);
     bff3->ctr_branch_out();
-    bff3->ctr_memRead_out();
+    bff3->ctr_memRead_out(data_mem_mem_read);
     bff3->ctr_memWrite_out();
     bff3->ctr_memToReg_out();
     bff3->branch_inst_addres_out();
     bff3->alu_zero_out();
-    bff3->alu_s_out();
-    bff3->reg_mem_r2_v_out();
+    bff3->alu_s_out(data_mem_data_address);
+    bff3->reg_mem_r2_v_out(data_mem_write_data);
     bff3->reg_mem_write_address_out();
+  }
+  
+  void bff4_ini() {
+    bff4->ctr_regWrite_in();
+    bff4->reg_mem_write_address_in(); 
+    bff4->alu_s_in();
+    bff4->dm_data_value_in();
+    bff4->ctr_regWrite_out();
+    bff4->reg_mem_write_address_out(); 
+    bff4->alu_s_out();
+    bff4->dm_data_value_out();
   }
 
 
@@ -259,41 +282,39 @@ SC_MODULE(PO) {
       //EXECUTION
 
       //ALU
-      alu_op.write(bff2.opCode);
-      cout << "bff2 opCode: " << bff2.opCode << endl;
-      cout << "bff2 register mem value 1: " << bff2.reg_mem_r1_v << endl;
+      //alu_op.write(bff2.opCode);
+      cout << "bff2 opCode: " << bff2_opcode.read() << endl;
+      cout << "bff2 register mem value 1: " << reg_mem_r1_value.read() << endl;
 
+      //alu_x.write(bff2.reg_mem_r1_v);
 
-      alu_x.write(bff2.reg_mem_r1_v);
-
-      if(ctr_aluSrc.read() == 1) {
-        alu_y.write(bff2.desloc_rd);
+      /*MUX para decidir segunda entrada da ULA (ou um endereço da memória de dados,
+      ou a segunda saída do banco de registradores)*/
+      if(bff2_ctr_aluSrc.read() == 1) {
+        alu_y.write(bff2_desloc_rd_out.read());
       }
       else {
-      	alu_y.write(bff2.reg_mem_r2_v);
+      	alu_y.write(bff2_reg_mem_r2_v_out.read());
       }
 
-      if(ctr_regDst.read() == 1) {
-        bff3.reg_mem_write_address = bff2.desloc_rd;
+
+      /*MUX para decidir se o endereço de escrita no banco de registradores (na etapa WB)
+      vem do "rt" ou do "desloc_rd"*/
+      if(bff2_ctr_regDst.read() == 1) {
+        bff3_reg_mem_write_address_in.write(bff2_desloc_rd_out.read());
       }
       else {
-      	bff3.reg_mem_write_address = bff2.rt;
+      	bff3_reg_mem_write_address_in.write(bff2_rt_out.read());
       }
 
 
 
       //BUFFER EX/MEM
-      bff3.ctr_regWrite = bff2.ctr_regWrite;
-      bff3.ctr_memToReg = bff2.ctr_memToReg;
-      bff3.ctr_memWrite = bff2.ctr_memWrite;
-      bff3.ctr_branch = bff2.ctr_branch;
-      bff3.ctr_memRead = bff2.ctr_memRead;
+      bff3_branch_inst_addres_in.write(bff2_next_inst_addres_out.read() + bff2_desloc_rd_out.read());
 
-      bff3.branch_inst_addres =  bff2.next_inst_addres + bff2.desloc_rd;
-
-      bff3.alu_zero = alu_zero.read();
-      bff3.alu_s = alu_s.read();
-      bff3.reg_mem_r2_v = bff2.reg_mem_r2_v;
+      //bff3.alu_zero = alu_zero.read();
+      //bff3.alu_s = alu_s.read();
+      //bff3.reg_mem_r2_v = bff2.reg_mem_r2_v;
 
 
 
@@ -309,8 +330,8 @@ SC_MODULE(PO) {
       //cout << "ctr_memRead: " << ctr_memRead.read() << endl;
       cout << "ctr_memRead: " << ctr_memRead.read() << endl;
 
-      data_mem_data_address.write(bff3.alu_s);
-      data_mem_write_data.write(bff3.reg_mem_r2_v);
+      //data_mem_data_address.write(bff3.alu_s);
+      //data_mem_write_data.write(bff3.reg_mem_r2_v);
 
 
       pcSrc = bff3.ctr_branch & bff3.alu_zero;
