@@ -14,40 +14,46 @@ SC_MODULE(PO) {
   sc_signal<sc_uint<24>> inst_mem_data;
   
   ALU* alu;
-  sc_signal<sc_uint<32>> alu_x;
-  sc_signal<sc_uint<32>> alu_y;
+  sc_signal<sc_uint<5>> alu_x;
+  sc_signal<sc_uint<5>> alu_y;
   sc_signal<sc_uint<4>> alu_op;
-  sc_signal<sc_uint<32>> alu_s;
+  sc_signal<sc_uint<5>> alu_s;
   sc_signal<sc_uint<1>> alu_zero;
   
   CTR* ctr;
   sc_signal<sc_uint<1>> ctr_regWrite;
   sc_signal<sc_uint<1>> ctr_memToReg;
   sc_signal<sc_uint<1>> ctr_memWrite;
+  sc_signal<sc_uint<1>> ctr_branch;
   sc_signal<sc_uint<1>> ctr_memRead;
   sc_signal<sc_uint<1>> ctr_aluSrc;
+  sc_signal<sc_uint<1>> ctr_regDst;
   sc_signal<sc_uint<4>> ctr_ctrop;
+  
   
   DATA_MEM* dm;
   sc_signal<sc_uint<5>> data_mem_data_address;
   sc_signal<sc_uint<1>> data_mem_mem_write;
   sc_signal<sc_uint<1>> data_mem_mem_read;
-  sc_signal<sc_uint<32>> data_mem_write_data;
-  sc_signal<sc_uint<32>> data_mem_data_value;
+  sc_signal<sc_uint<5>> data_mem_write_data;
+  sc_signal<sc_uint<5>> data_mem_data_value;
 
   REG_MEM* rm;
   sc_signal<sc_uint<5>> reg_mem_r1_address;
   sc_signal<sc_uint<5>> reg_mem_r2_address;
   sc_signal<sc_uint<1>> reg_mem_reg_write;
   sc_signal<sc_uint<5>> reg_mem_write_address;
-  sc_signal<sc_uint<32>> reg_mem_write_data;
-  sc_signal<sc_uint<32>> reg_mem_r1_value;
-  sc_signal<sc_uint<32>> reg_mem_r2_value;
+  sc_signal<sc_uint<5>> reg_mem_write_data;
+  sc_signal<sc_uint<5>> reg_mem_r1_value;
+  sc_signal<sc_uint<5>> reg_mem_r2_value;
 
+  sc_uint<1> pcSrc;
+  
   void int_mem_ini() {
     inst_mem->inst_address(inst_mem_adress);
     inst_mem->inst_data(inst_mem_data);
     inst_mem->clock(clock);
+    inst_mem_adress.write(0);
   }
   
   void alu_ini() {
@@ -64,8 +70,10 @@ SC_MODULE(PO) {
     ctr->regWrite(ctr_regWrite);
     ctr->memToReg(ctr_memToReg);
     ctr->memWrite(ctr_memWrite);
+    ctr->branch(ctr_branch);
     ctr->memRead(ctr_memRead);
     ctr->aluSrc(ctr_aluSrc);
+    ctr->regDst(ctr_regDst);
     ctr->clock(clock);
   }
 
@@ -99,52 +107,6 @@ SC_MODULE(PO) {
     *rs = inst_mem_data.read() >> 10;
     //Bits [9-5]
     *desloc_rd = inst_mem_data.read() >> 5;
-    
-    switch(*opcode) {
-        case 7: {
-          //Bits [19-15]
-          *rt = inst_mem_data.read() >> 15;
-          //Bits [14-10]
-          *rs = inst_mem_data.read() >> 10;
-          //Bits [9-5]
-          *desloc_rd = inst_mem_data.read() >> 5;
-          break;
-        }
-        case 8: {
-          //Bits [19-15]
-          *rt = inst_mem_data.read() >> 15;
-          //Bits [14-10]
-          *rs = inst_mem_data.read() >> 10;
-          //Bits [9-5]
-          *desloc_rd = inst_mem_data.read() >> 5;
-          break;
-        }
-        case 9: {
-          //Bits [9-5]
-          *desloc_rd = inst_mem_data.read() >> 5;
-          break;
-        }
-        case 10: {
-          //Bits [9-5]
-          *desloc_rd = inst_mem_data.read() >> 5;
-          break;
-        }
-        case 11: {
-          //Bits [9-5]
-          *desloc_rd = inst_mem_data.read() >> 5;
-          break;
-        } 
-        default: {
-          //Bits [19-15]
-          *rt = inst_mem_data.read() >> 15;
-          //Bits [14-10]
-          *rs = inst_mem_data.read() >> 10;
-          //Bits [9-5]
-          *desloc_rd = inst_mem_data.read() >> 5;
-          break;
-        }
-      } 
-  
   }
   
   
@@ -156,51 +118,71 @@ SC_MODULE(PO) {
   typedef struct buffer2 {
   	sc_uint<5> next_inst_addres;
     sc_uint<5> rt;
-    sc_uint<5> rd;
+    sc_uint<5> desloc_rd;
     sc_uint<5> opCode;
-    sc_uint<5> desloc; 
     sc_uint<5> reg_mem_r1_v;
     sc_uint<5> reg_mem_r2_v;
-    sc_uint<1> = ctr_regWrite;
-    sc_uint<1> = ctr_memToReg;
-    sc_uint<1> = ctr_memWrite;
-    sc_uint<1> = ctr_memRead;
-    sc_uint<1> = ctr_aluSrc;
+    sc_uint<1> ctr_regWrite;
+    sc_uint<1> ctr_branch;
+    sc_uint<1> ctr_memToReg;
+    sc_uint<1> ctr_memWrite;
+    sc_uint<1> ctr_memRead;
+    sc_uint<1> ctr_aluSrc;
+    sc_uint<1> ctr_regDst;
+    
     
   } BufferIdEx;
   
   typedef struct buffer3 {
-  	sc_uint<24> instruction;
+    sc_uint<1> ctr_regWrite;
+    sc_uint<1> ctr_branch;
+    sc_uint<1> ctr_memRead;
+    sc_uint<1> ctr_memWrite;
+    sc_uint<1> ctr_memToReg;
     sc_uint<5> branch_inst_addres;
+    sc_uint<1> alu_zero;
+    sc_uint<5> alu_s;
+    sc_uint<5> reg_mem_r2_v;
+    sc_uint<5> reg_mem_write_address;
   } BufferExMem;
   
+  typedef struct buffer4 {
+    sc_uint<1> ctr_regWrite;
+    sc_uint<5> reg_mem_write_address; 
+    sc_uint<5> alu_s;
+    sc_uint<5> dm_data_value;
+    
+    
+  } BufferMemWb;
   
-    void do_po() {
-      
+  
+  BufferIfId bff1;
+  BufferIdEx bff2;
+  BufferExMem bff3;
+  BufferMemWb bff4;
+  
+  
+    void do_po() { 
       //INSTRUCTION FETCH
-      BufferIfId bff1;
       
       
       
       //BUFFER IF/ID
       //Instruction Memory
-      beff1.instruction = inst_mem_data.read();
-      beff1.next_inst_addres = inst_mem_adress.read() + 1;
-     
+      bff1.instruction = inst_mem_data.read();
+      bff1.next_inst_addres = inst_mem_adress.read() + 1;
       
       
       
       //INSTRUCTION DECODE
-      BufferIfId bff2;
      
       //Divide bits da instrução
       sc_uint<4> opcode;
       sc_uint<5> rg_r1_address;
       sc_uint<5> rg_r2_address;
-      sc_uint<5> desloc;
-      sc_uint<5> rd;
+      sc_uint<5> desloc_rd;
       decode_instruction(bff1.instruction, &opcode, &rg_r1_address, &rg_r2_address, 
-                         &desloc, &rd);
+                         &desloc_rd);
       cout << "opcode: " << opcode << endl;
       cout << "clock: " << clock << endl;
       
@@ -213,7 +195,7 @@ SC_MODULE(PO) {
       // Seta entradas de controle do banco de registradores
       reg_mem_reg_write.write(bff4.ctr_regWrite);
       
-      reg_mem_write_address.write(bff4.rt);
+      reg_mem_write_address.write(bff4.reg_mem_write_address);
       reg_mem_write_data.write(data_mem_data_value.read());
       
       reg_mem_r1_address.write(rg_r1_address);
@@ -221,38 +203,24 @@ SC_MODULE(PO) {
       
       
       
-      //Extende deslocamento de 10bits para 32bits
-//       sc_uint<1> desloc_msb = desloc >> 9;
-      
-//       sc_uint<32> desloc_extended = 0;
-//       sc_uint<32> se1 = 4294966272;
-
-//       if (desloc_msb == 1){
-//         desloc_extended = se1 + desloc;
-//       } else {
-//         desloc_extended = desloc;
-//       }
-      
-      
-      
       //BUFFER ID/EX
       bff2.opCode = opcode;
       
       bff2.ctr_regWrite = ctr_regWrite.read();
+      bff2.ctr_branch = ctr_branch.read();
       bff2.ctr_memToReg = ctr_memToReg.read();
       bff2.ctr_memWrite = ctr_memWrite.read();
       bff2.ctr_memRead = ctr_memRead.read();
       bff2.ctr_aluSrc = ctr_aluSrc.read();
+      bff2.ctr_regDst = ctr_regDst.read();
       
       bff2.next_inst_addres = bff1.next_inst_addres;
       
-      bff2.reg_mem_r1_v = r1_value.read();
-      bff2.reg_mem_r2_v = r2_value.read();
+      bff2.reg_mem_r1_v = reg_mem_r1_value.read();
+      bff2.reg_mem_r2_v = reg_mem_r2_value.read();
       
-      bff2.desloc = desloc;
-      
-      bff2.rt = rt;
-      bff2.rd = rd;
+      bff2.rt = rg_r1_address;
+      bff2.desloc_rd = desloc_rd;
       
       
       
@@ -263,54 +231,84 @@ SC_MODULE(PO) {
       
       alu_x.write(bff2.reg_mem_r1_v);
       
-      if(ctr_aluSrc == 1) {
-        alu_y.write(bff2.desloc);
+      if(ctr_aluSrc.read() == 1) {
+        alu_y.write(bff2.desloc_rd);
       }
       else {
-      	alu_y.write(bff2.reg_mem_r1_v);
+      	alu_y.write(bff2.reg_mem_r2_v);
       }
+      
+      if(ctr_regDst.read() == 1) {
+        bff3.reg_mem_write_address = bff2.desloc_rd; 
+      }
+      else {
+      	bff3.reg_mem_write_address = bff2.rt;
+      }
+      
       
       
       //BUFFER EX/MEM
-      bff3.branch_inst_addres =  bff2.next_inst_addres + bff2.desloc;
+      bff3.ctr_regWrite = bff2.ctr_regWrite;
+      bff3.ctr_memToReg = bff2.ctr_memToReg;
+      bff3.ctr_memWrite = bff2.ctr_memWrite;
+      bff3.ctr_branch = bff2.ctr_branch;
+      bff3.ctr_memRead = bff2.ctr_memRead;
       
-
+      bff3.branch_inst_addres =  bff2.next_inst_addres + bff2.desloc_rd;
+      
+      bff3.alu_zero = alu_zero.read();
+      bff3.alu_s = alu_s.read();
+      bff3.reg_mem_r2_v = bff2.reg_mem_r2_v;
       
       
       
+      //MEMORY
       
       
       
-      
-      
-      //-------DATA MEMORY
+      //Data Memory
       // Seta entradas de controle do banco de dados
-      data_mem_mem_read.write(ctr_memRead.read());
-      data_mem_mem_write.write(ctr_memWrite.read());
+      data_mem_mem_read.write(bff3.ctr_memRead);
+      data_mem_mem_write.write(bff3.ctr_memWrite);
       
+      //cout << "ctr_memRead: " << ctr_memRead.read() << endl;
       cout << "ctr_memRead: " << ctr_memRead.read() << endl;
       
-      data_mem_data_address.write(bff1.rs);
-      cout << "inst_dm_address: " << inst_dm_address << endl;
+      data_mem_data_address.write(bff3.alu_s);
+      data_mem_write_data.write(bff3.reg_mem_r2_v);
       
       
-    
-        
-      BufferExMem bff3;
-      
+      pcSrc = bff3.ctr_branch & bff3.alu_zero;
       
       
       
-      //TESTE
-      reg_mem_r1_address.write(1);
+      //BUFFER MEM/WB
+      bff4.ctr_regWrite = bff3.ctr_regWrite;
+      bff4.reg_mem_write_address = bff3.reg_mem_write_address;
+      bff4.alu_s = bff3.alu_s;
+      bff4.dm_data_value = data_mem_data_value.read();
       
-      cout << "valor recuperado do banco: " + reg_mem_r1_value.read() << endl;
-      
-       
       
       
-      //PC: Aumenta endereço da próxima instrução em uma unidade(4 bytes)
-      inst_mem_adress.write(inst_mem_adress.read() + 1);
+      //WRITE BACK
+      if(ctr_memToReg.read() == 1) {
+      	 reg_mem_write_data.write(bff4.alu_s);
+      }
+      else {
+      	reg_mem_write_data.write(bff4.dm_data_value);
+      }
+      
+      reg_mem_reg_write.write(bff4.ctr_regWrite);
+      reg_mem_write_address.write(bff4.reg_mem_write_address);
+      
+      if(pcSrc == 1) {
+        inst_mem_adress.write(bff3.branch_inst_addres);
+      }
+      else {
+      	inst_mem_adress.write(inst_mem_adress.read() + 1);
+      }
+      
+  
     }
 
     SC_CTOR(PO) {
@@ -324,9 +322,9 @@ SC_MODULE(PO) {
       data_mem_ini();
       int_mem_ini();
       reg_mem_ini();
-      
+      pcSrc = 0;
       
       SC_METHOD(do_po);
-        sensitive << clock.neg();
+        sensitive << clock.pos();
     }
 };
