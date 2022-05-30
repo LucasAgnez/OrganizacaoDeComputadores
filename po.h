@@ -277,9 +277,9 @@ SC_MODULE(PO) {
 
       //Registers bank
       // Seta entradas de controle do banco de registradores
-      reg_mem_reg_write.write(bff4.ctr_regWrite);
+      reg_mem_reg_write.write(bff4_ctr_regWrite_out.read());
 
-      reg_mem_write_address.write(bff4.reg_mem_write_address);
+      reg_mem_write_address.write(bff4_reg_mem_write_address_out.read());
       //reg_mem_write_data.write(data_mem_data_value.read());
 
       reg_mem_r1_address.write(rg_r1_address);
@@ -375,7 +375,7 @@ SC_MODULE(PO) {
         //inst_mem_adress.write(bff3.branch_inst_addres);
       }
       else {
-        inst_address.write(inst_mem_adress.read() + 1);
+        inst_address.write(next_inst_address.read() + 1);
       	//inst_mem_adress.write(inst_mem_adress.read() + 1);
       }
 
