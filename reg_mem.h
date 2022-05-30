@@ -13,7 +13,7 @@ SC_MODULE(REG_MEM) {
 	sc_out<sc_uint<5>> r1_value;
 	sc_out<sc_uint<5>> r2_value;
 
-	sc_uint<5> registers[32];
+	sc_uint<32> registers[32];
 	
 
 
@@ -27,13 +27,14 @@ SC_MODULE(REG_MEM) {
 		registers[0] = 0;
 		if(reg_write.read() == 1){
 			registers[write_address.read()] = write_data.read();
+          	cout << "escrevendoooooooooo: " << write_data.read() << endl;
 		}
 	}
 
 	SC_CTOR(REG_MEM) {
-		SC_METHOD(do_read)
+		SC_METHOD(do_read);
 			sensitive << clock.pos();
-		SC_METHOD(do_write)
+		SC_METHOD(do_write);
 			sensitive << clock.pos();
 	}
 
