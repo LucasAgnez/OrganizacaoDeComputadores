@@ -1,6 +1,6 @@
 #include "systemc.h"
 
-SC_MODULE(alu) {
+SC_MODULE(ALU) {
   	sc_in_clk clock; 
   
     sc_in<sc_uint<5>> A;
@@ -24,19 +24,55 @@ SC_MODULE(alu) {
         }
         case 2: {
           S.write(A.read() ^ B.read());
-            break;
+          break;
         }
         case 3: {
           S.write(~A.read());
-            break;
+          break;
         }
         case 4: {
-          S.write(A.read() + B.read());
-            break;
+          if(A.read() == B.read()) {
+            S.write(1);
+          }
+          else{
+            S.write(0);
+          }
+          break;
         }
         case 5: {
+          S.write(A.read() + B.read());
+          break;
+        }
+        case 6: {
           S.write(A.read() - B.read());
-            break;
+          break;
+        }
+        case 7: {
+          S.write(A.read() + B.read());
+          break;
+        }
+        case 8: {
+          S.write(A.read() + B.read());
+          break;
+        }
+        case 9: {
+          S.write(0);
+          break;
+        }
+        case 10: {
+          if((A.read() - B.read()) < 0){
+            S.write("0");
+          }
+          break;
+        }
+        case 11: {
+          S.write(A.read() - B.read());
+          break;
+        }
+        
+        default: {
+          S.write(A.read() - B.read());
+          break;
         }
       }
       
@@ -48,7 +84,7 @@ SC_MODULE(alu) {
       }
     }
 
-    SC_CTOR(alu) {
+    SC_CTOR(ALU) {
         SC_METHOD(do_alu);
         sensitive << clock.pos();
     }
