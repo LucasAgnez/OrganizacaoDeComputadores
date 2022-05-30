@@ -31,7 +31,7 @@ SC_MODULE(DATA_MEM) {
     }
      
   	void do_cache_miss() {
-		data[0] = 100;
+		data[0] = 10;
       	data[1] = 1;
       	data[2] = 2;
       	data[3] = 3;
@@ -41,9 +41,9 @@ SC_MODULE(DATA_MEM) {
 
     SC_CTOR(DATA_MEM) {
       do_cache_miss();
-      SC_METHOD(do_read)
+      SC_METHOD(do_read);
         sensitive << clock.pos();
-      SC_METHOD(do_write)
+      SC_METHOD(do_write);
         sensitive << clock.pos();
     }
 
