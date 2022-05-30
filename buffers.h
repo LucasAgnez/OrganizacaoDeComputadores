@@ -26,7 +26,7 @@ SC_MODULE(BufferIdEx) {
   sc_in<sc_uint<5>> next_inst_addres_in;
   sc_in<sc_uint<5>> rt_in;
   sc_in<sc_uint<5>> desloc_rd_in;
-  sc_in<sc_uint<5>> opCode_in;
+  sc_in<sc_uint<4>> opCode_in;
   sc_in<sc_uint<5>> reg_mem_r1_v_in;
   sc_in<sc_uint<5>> reg_mem_r2_v_in;
   sc_in<sc_uint<1>> ctr_regWrite_in;
@@ -40,7 +40,7 @@ SC_MODULE(BufferIdEx) {
   sc_out<sc_uint<5>> next_inst_addres_out;
   sc_out<sc_uint<5>> rt_out;
   sc_out<sc_uint<5>> desloc_rd_out;
-  sc_out<sc_uint<5>> opCode_out;
+  sc_out<sc_uint<4>> opCode_out;
   sc_out<sc_uint<5>> reg_mem_r1_v_out;
   sc_out<sc_uint<5>> reg_mem_r2_v_out;
   sc_out<sc_uint<1>> ctr_regWrite_out;
@@ -146,4 +146,3 @@ SC_MODULE(BufferMemWb) {
       sensitive << clock.neg();
   }
 };
-  
