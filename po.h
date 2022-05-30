@@ -67,7 +67,7 @@ SC_MODULE(PO) {
     inst_mem->inst_address(next_inst_address);
     inst_mem->inst_data(inst_mem_data);
     inst_mem->clock(clock);
-    inst_mem_adress.write(0);
+    //inst_mem_adress.write(0);
   }
 
   void alu_ini() {
@@ -112,6 +112,8 @@ SC_MODULE(PO) {
   }
 
   BufferIfId* bff1;
+  sc_signal<sc_uint<24>> instruction_out;
+  sc_signal<sc_uint<5>> next_inst_addres_out;
 
   BufferIdEx* bff2;
   sc_signal<sc_uint<4>> bff2_opcode;
@@ -137,7 +139,7 @@ SC_MODULE(PO) {
   sc_signal<sc_uint<5>> bff3_reg_mem_write_address_in;
   sc_signal<sc_uint<5>> bff3_branch_inst_addres_in;
   sc_signal<sc_uint<1>> bff3_ctr_regWrite_out;
-  sc_signal<sc_uint<1>> bff3_reg_mem_write_address_out;
+  sc_signal<sc_uint<5>> bff3_reg_mem_write_address_out;
   sc_signal<sc_uint<1>> bff3_ctr_branch_out;
   sc_signal<sc_uint<1>> bff3_alu_zero_out;
   sc_signal<sc_uint<1>> bff3_memToReg_out;
@@ -147,10 +149,10 @@ SC_MODULE(PO) {
 
   BufferMemWb* bff4;
   sc_signal<sc_uint<1>> bff4_ctr_memToReg_out;
-  sc_signal<sc_uint<1>> bff4_alu_s_out;
-  sc_signal<sc_uint<1>> bff4_dm_data_value_out;
+  sc_signal<sc_uint<5>> bff4_alu_s_out;
+  sc_signal<sc_uint<5>> bff4_dm_data_value_out;
   sc_signal<sc_uint<1>> bff4_ctr_regWrite_out;
-  sc_signal<sc_uint<1>> bff4_reg_mem_write_address_out;
+  sc_signal<sc_uint<5>> bff4_reg_mem_write_address_out;
 
 
   void bff1_ini() {
