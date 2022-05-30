@@ -7,8 +7,16 @@
 #include "buffers.h"
 #include "pc.h"
 
-SC_MODULE(PO) {
+SC_MODULE(PROCESSOR) {
   sc_in_clk clock;
+
+  sc_out<sc_uint<5>> test_pc_out;
+  sc_out<sc_uint<5>> test_mem_inst_out;
+  sc_out<sc_uint<5>> test_mem_reg_1;
+  sc_out<sc_uint<5>> test_mem_reg_2;
+  sc_out<sc_uint<5>> test_mem_reg_3;
+  sc_out<sc_uint<5>> test_mem_reg_r1_out;
+  sc_out<sc_uint<5>> test_mem_reg_r2_out;
 
 
   PC* pc;
@@ -382,7 +390,7 @@ SC_MODULE(PO) {
 
     }
 
-    SC_CTOR(PO) {
+    SC_CTOR(PROCESSOR) {
       pc = new PC("PC");
       inst_mem = new INST_MEM("INST_MEM");
       alu = new ALU("ALU");

@@ -6,7 +6,7 @@ SC_MODULE(INST_MEM) {
   sc_in<sc_uint<5>> inst_address;
   sc_out<sc_uint<24>> inst_data;
 
-  sc_uint<24> instructions[128];
+  sc_uint<24> instructions[32];
 
 
     void do_read() {

@@ -12,7 +12,7 @@ SC_MODULE(DATA_MEM) {
   
 	sc_out<sc_uint<5>> data_value;
 
-	sc_uint<5> data[128];
+	sc_uint<5> data[32];
 
 
     void do_read() {
