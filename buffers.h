@@ -122,17 +122,20 @@ SC_MODULE(BufferMemWb) {
   sc_in_clk clock;
   
   sc_in<sc_uint<1>> ctr_regWrite_in;
+  sc_in<sc_uint<1>> ctr_memToReg_in;
   sc_in<sc_uint<5>> reg_mem_write_address_in; 
   sc_in<sc_uint<5>> alu_s_in;
   sc_in<sc_uint<5>> dm_data_value_in;
   
   sc_out<sc_uint<1>> ctr_regWrite_out;
+  sc_out<sc_uint<1>> ctr_memToReg_out;
   sc_out<sc_uint<5>> reg_mem_write_address_out; 
   sc_out<sc_uint<5>> alu_s_out;
   sc_out<sc_uint<5>> dm_data_value_out;
   
   void do_write() {
     ctr_regWrite_out.write(ctr_regWrite_in.read());
+    ctr_memToReg_out.write(ctr_memToReg_in.read());
     reg_mem_write_address_out.write(reg_mem_write_address_in.read()); 
     alu_s_out.write(alu_s_in.read());
     dm_data_value_out.write(dm_data_value_in.read());  
