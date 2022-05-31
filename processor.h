@@ -12,11 +12,18 @@ SC_MODULE(PROCESSOR) {
 
   sc_out<sc_uint<5>> test_pc_out;
   sc_out<sc_uint<5>> test_mem_inst_out;
-  sc_out<sc_uint<5>> test_mem_reg_1;
-  sc_out<sc_uint<5>> test_mem_reg_2;
-  sc_out<sc_uint<5>> test_mem_reg_3;
+  sc_out<sc_uint<5>> test_opcode;
   sc_out<sc_uint<5>> test_mem_reg_r1_out;
   sc_out<sc_uint<5>> test_mem_reg_r2_out;
+  sc_out<sc_uint<5>> test_alu_opcode;
+  sc_out<sc_uint<5>> test_alu_x;
+  sc_out<sc_uint<5>> test_alu_y;
+  sc_out<sc_uint<5>> test_alu_s;
+  sc_out<sc_uint<5>> test_alu_zero;
+  sc_out<sc_uint<5>> test_data_mem_adress;
+  sc_out<sc_uint<5>> test_data_mem_data;
+  sc_out<sc_uint<5>> test_data_mem_value_out;
+
 
 
   PC* pc;
@@ -254,16 +261,10 @@ SC_MODULE(PROCESSOR) {
   }
 
 
-
-
-
-
-
-
-
-
-    void do_po() {
+    void do_execute() {
       //INSTRUCTION FETCH
+      test_pc_out.write(next_inst_address.read());
+      test_mem_inst_out.write(inst_mem_data.read());
 
 
       //INSTRUCTION DECODE
@@ -275,9 +276,7 @@ SC_MODULE(PROCESSOR) {
       sc_uint<5> desloc_rd;
       decode_instruction(instruction_out.read(), &opcode, &rg_r1_address, &rg_r2_address,
                          &desloc_rd);
-      cout << "opcode: " << opcode << endl;
-      cout << "clock: " << clock << endl;
-
+      test_opcode.write(opcode);
 
       //Control
       ctr_ctrop.write(opcode);
@@ -286,29 +285,26 @@ SC_MODULE(PROCESSOR) {
       //Registers bank
       // Seta entradas de controle do banco de registradores
       reg_mem_reg_write.write(bff4_ctr_regWrite_out.read());
-
       reg_mem_write_address.write(bff4_reg_mem_write_address_out.read());
-      //reg_mem_write_data.write(data_mem_data_value.read());
 
       reg_mem_r1_address.write(rg_r1_address);
       reg_mem_r2_address.write(rg_r2_address);
+      test_mem_reg_r1_out.write(reg_mem_r1_value.read());
+      test_mem_reg_r1_out.write(reg_mem_r2_value.read());
 
 
 
       //BUFFER ID/EX
       bff2_opcode.write(opcode);
-
       bff2_rt.write(rg_r1_address);
       bff2_rd_desloc.write(desloc_rd);
 
 
 
       //EXECUTION
-
       //ALU
-      //alu_op.write(bff2.opCode);
-      cout << "bff2 opCode: " << bff2_opcode.read() << endl;
-      cout << "bff2 register mem value 1: " << reg_mem_r1_value.read() << endl;
+      test_alu_opcode.write(bff2_opcode.read())
+      test_alu_x.write(reg_mem_r1_value.read());
 
       //alu_x.write(bff2.reg_mem_r1_v);
 
@@ -316,10 +312,15 @@ SC_MODULE(PROCESSOR) {
       ou a segunda saída do banco de registradores)*/
       if(bff2_ctr_aluSrc.read() == 1) {
         alu_y.write(bff2_desloc_rd_out.read());
+        test_alu_y.write(bff2_desloc_rd_out.read());
       }
       else {
       	alu_y.write(bff2_reg_mem_r2_v_out.read());
+      	test_alu_y.write(bff2_reg_mem_r2_v_out.read());
       }
+      test_alu_s.write(alu_s.read());
+      test_alu_zero.write(alu_zero.read());
+
 
 
       /*MUX para decidir se o endereço de escrita no banco de registradores (na etapa WB)
@@ -336,10 +337,6 @@ SC_MODULE(PROCESSOR) {
       //BUFFER EX/MEM
       bff3_branch_inst_addres_in.write(bff2_next_inst_addres_out.read() + bff2_desloc_rd_out.read());
 
-      //bff3.alu_zero = alu_zero.read();
-      //bff3.alu_s = alu_s.read();
-      //bff3.reg_mem_r2_v = bff2.reg_mem_r2_v;
-
 
 
       //MEMORY
@@ -348,22 +345,12 @@ SC_MODULE(PROCESSOR) {
       data_mem_mem_read.write(data_mem_mem_read.read());
       data_mem_mem_write.write(data_mem_mem_write.read());
 
-      //cout << "ctr_memRead: " << ctr_memRead.read() << endl;
-      cout << "ctr_memRead: " << data_mem_mem_read.read() << endl;
-
-      //data_mem_data_address.write(bff3.alu_s);
-      //data_mem_write_data.write(bff3.reg_mem_r2_v);
-
+      test_data_mem_adress.write(data_mem_data_address.read());
+      test_data_mem_data.write(data_mem_write_data.read());
+      test_data_mem_value_out.write(data_mem_data_value.read());
 
       pcSrc = bff3_ctr_branch_out.read() & bff3_alu_zero_out.read();
 
-
-
-      //BUFFER MEM/WB
-      //bff4.ctr_regWrite = bff3.ctr_regWrite;
-      //bff4.reg_mem_write_address = bff3.reg_mem_write_address;
-      //bff4.alu_s = bff3.alu_s;
-      //bff4.dm_data_value = data_mem_data_value.read();
 
 
 
@@ -407,7 +394,7 @@ SC_MODULE(PROCESSOR) {
       reg_mem_ini();
       pcSrc = 0;
 
-      SC_METHOD(do_po);
+      SC_METHOD(do_execute);
         sensitive << clock.pos();
     }
 
