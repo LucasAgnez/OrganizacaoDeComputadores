@@ -44,7 +44,7 @@ SC_MODULE(DATA_MEM) {
       SC_METHOD(do_read);
         sensitive << clock.pos();
       SC_METHOD(do_write);
-        sensitive << clock.pos();
+        sensitive << clock.neg();
     }
 
 };

@@ -1,5 +1,5 @@
 #include "systemc.h"
-#include "ALU.h"
+#include "alu.h"
 #include "ctr.h"
 #include "reg_mem.h"
 #include "inst_mem.h"
@@ -11,15 +11,17 @@ SC_MODULE(PROCESSOR) {
   sc_in_clk clock;
 
   sc_out<sc_uint<5>> test_pc_out;
-  sc_out<sc_uint<5>> test_mem_inst_out;
-  sc_out<sc_uint<5>> test_opcode;
+  sc_out<sc_uint<24>> test_mem_inst_out;
+  sc_out<sc_uint<4>> test_opcode;
+  sc_out<sc_uint<5>> test_mem_reg_r1_in;
+  sc_out<sc_uint<5>> test_mem_reg_r2_in;
   sc_out<sc_uint<5>> test_mem_reg_r1_out;
   sc_out<sc_uint<5>> test_mem_reg_r2_out;
-  sc_out<sc_uint<5>> test_alu_opcode;
+  sc_out<sc_uint<4>> test_alu_opcode;
   sc_out<sc_uint<5>> test_alu_x;
   sc_out<sc_uint<5>> test_alu_y;
   sc_out<sc_uint<5>> test_alu_s;
-  sc_out<sc_uint<5>> test_alu_zero;
+  sc_out<sc_uint<1>> test_alu_zero;
   sc_out<sc_uint<5>> test_data_mem_adress;
   sc_out<sc_uint<5>> test_data_mem_data;
   sc_out<sc_uint<5>> test_data_mem_value_out;
@@ -289,6 +291,9 @@ SC_MODULE(PROCESSOR) {
 
       reg_mem_r1_address.write(rg_r1_address);
       reg_mem_r2_address.write(rg_r2_address);
+      test_mem_reg_r1_in.write(rg_r1_address);
+      test_mem_reg_r2_in.write(rg_r2_address);
+
       test_mem_reg_r1_out.write(reg_mem_r1_value.read());
       test_mem_reg_r1_out.write(reg_mem_r2_value.read());
 
@@ -303,7 +308,7 @@ SC_MODULE(PROCESSOR) {
 
       //EXECUTION
       //ALU
-      test_alu_opcode.write(bff2_opcode.read())
+      test_alu_opcode.write(bff2_opcode.read());
       test_alu_x.write(reg_mem_r1_value.read());
 
       //alu_x.write(bff2.reg_mem_r1_v);
@@ -393,6 +398,8 @@ SC_MODULE(PROCESSOR) {
       int_mem_ini();
       reg_mem_ini();
       pcSrc = 0;
+      alu_y.write(0);
+      alu_x.write(0);
 
       SC_METHOD(do_execute);
         sensitive << clock.pos();

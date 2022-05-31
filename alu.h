@@ -85,7 +85,8 @@ SC_MODULE(ALU) {
     }
 
     SC_CTOR(ALU) {
-        SC_METHOD(do_alu);
-        sensitive << clock.pos();
+
+      SC_METHOD(do_alu);
+      sensitive << A << B << OP;
     }
 };

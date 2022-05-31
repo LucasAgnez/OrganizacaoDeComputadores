@@ -32,10 +32,12 @@ SC_MODULE(REG_MEM) {
 	}
 
 	SC_CTOR(REG_MEM) {
+	  registers[1] = 5;
+	  registers[2] = 10;
 		SC_METHOD(do_read);
 			sensitive << clock.pos();
 		SC_METHOD(do_write);
-			sensitive << clock.pos();
+			sensitive << clock.neg();
 	}
 
 };
