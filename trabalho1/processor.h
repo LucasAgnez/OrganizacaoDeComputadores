@@ -255,9 +255,9 @@ SC_MODULE(PROCESSOR) {
     //Bits [23-20] (opcode)
     *opcode = instruction >> 20;
     //Bits [19-15]
-    *rt = inst_mem_data.read() >> 15;
+    *rs = inst_mem_data.read() >> 15;
     //Bits [14-10]
-    *rs = inst_mem_data.read() >> 10;
+    *rt = inst_mem_data.read() >> 10;
     //Bits [9-5]
     *desloc_rd = inst_mem_data.read() >> 5;
   }
