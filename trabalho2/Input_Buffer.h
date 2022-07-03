@@ -11,23 +11,27 @@ SC_MODULE(Input_Buffer) {
   sc_in<sc_uint<1>> rd;
   sc_out<sc_uint<1>> rok;
 
-  FIFO* bff;
+  sc_uint<32> data;
+
+  bool full = 0;
   
   void exec() {
-    if(!bff->is_full()){
-      wok.write(1);
-    }
-    else{
+    if(full){
       wok.write(0);
-    }
-    if(!bff->is_empty()){
       rok.write(1);
+      if(rd == 1){
+        data_out.write(data);
+        full = 0;
+      }
     }
     else{
+      wok.write(1);
       rok.write(0);
+      if(wr == 1){
+        data = data_in.read();
+        full = 1;
+      }
     }
-    bff->add(data_in);
-    data_out.write(bff->ptr());
   }
 
   SC_CTOR(Input_Buffer) {
