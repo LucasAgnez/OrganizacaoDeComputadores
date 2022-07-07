@@ -124,6 +124,46 @@ SC_MODULE(Output_Channel) {
     output_write_switch_ini();
   }
 
+  void exec(){
+    //ODS connections
+    output_data_switch_data0.write(data0.read());
+    output_data_switch_data1.write(data1.read());
+    output_data_switch_data2.write(data2.read());
+    output_data_switch_data3.write(data3.read());
+    output_data_switch_req0.write(output_ctr_gnt0.read());
+    output_data_switch_req1.write(output_ctr_gnt1.read());
+    output_data_switch_req2.write(output_ctr_gnt2.read());
+    output_data_switch_req3.write(output_ctr_gnt3.read());
+    data_out.write(output_data_switch_data_out.read());
+    
+    //OC connections
+    output_ctr_req0.write(req0.read());
+    output_ctr_req1.write(req1.read());
+    output_ctr_req2.write(req2.read());
+    output_ctr_req3.write(req3.read());
+    gnt0.write(output_ctr_gnt0.read());
+    gnt1.write(output_ctr_gnt1.read());
+    gnt2.write(output_ctr_gnt2.read());
+    gnt3.write(output_ctr_gnt3.read());
+    output_ctr_rd.write(output_flow_ctr_rd.read());
+    
+    
+    //OWS connections
+    output_write_switch_gnt0.write(output_ctr_gnt0.read());
+    output_write_switch_gnt1.write(output_ctr_gnt1.read());
+    output_write_switch_gnt2.write(output_ctr_gnt2.read());
+    output_write_switch_gnt3.write(output_ctr_gnt3.read());
+    output_write_switch_rok0.write(rok0.read());
+    output_write_switch_rok1.write(rok1.read());
+    output_write_switch_rok2.write(rok2.read());
+    output_write_switch_rok3.write(rok3.read());
+    
+    //OFC connections
+    output_flow_ctr_rok.write(output_write_switch_rok.read());
+    output_flow_ctr_out_ack.write(out_ack.read());
+    out_val.write(output_flow_ctr_out_val.read());
+  }
+
   SC_CTOR(Output_Channel) {
     output_channel_ini();
     SC_METHOD(exec);
