@@ -2,7 +2,7 @@
 #include "Output_Channel.h"
 
 SC_MODULE(Router) {
-	sc_in_clk clock;
+  sc_in_clk clock;
 
   sc_in<sc_uint<32>> north_data_in;
   sc_out<sc_uint<32>> north_data_out;
@@ -10,36 +10,36 @@ SC_MODULE(Router) {
   sc_in<sc_uint<1>> north_ack_out;
   sc_in<sc_uint<1>> north_val_in;
   sc_out<sc_uint<1>> north_val_out;
-  
+
   sc_in<sc_uint<32>> south_data_in;
   sc_out<sc_uint<32>> south_data_out;
   sc_out<sc_uint<1>> south_ack_in;
   sc_in<sc_uint<1>> south_ack_out;
   sc_in<sc_uint<1>> south_val_in;
   sc_out<sc_uint<1>> south_val_out;
-  
+
   sc_in<sc_uint<32>> east_data_in;
   sc_out<sc_uint<32>> east_data_out;
   sc_out<sc_uint<1>> east_ack_in;
   sc_in<sc_uint<1>> east_ack_out;
   sc_in<sc_uint<1>> east_val_in;
   sc_out<sc_uint<1>> east_val_out;
-  
+
   sc_in<sc_uint<32>> west_data_in;
   sc_out<sc_uint<32>> west_data_out;
   sc_out<sc_uint<1>> west_ack_in;
   sc_in<sc_uint<1>> west_ack_out;
   sc_in<sc_uint<1>> west_val_in;
   sc_out<sc_uint<1>> west_val_out;
-  
+
   sc_in<sc_uint<32>> local_data_in;
   sc_out<sc_uint<32>> local_data_out;
   sc_out<sc_uint<1>> local_ack_in;
   sc_in<sc_uint<1>> local_ack_out;
   sc_in<sc_uint<1>> local_val_in;
   sc_out<sc_uint<1>> local_val_out;
-  
-  Input_Channel* n_ic;  
+
+  Input_Channel* n_ic;
   sc_signal<sc_uint<32>> n_ic_data;
   sc_signal<sc_uint<1>> n_ic_val;
   sc_signal<sc_uint<1>> n_ic_ack;
@@ -57,7 +57,7 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> n_ic_e_req;
   sc_signal<sc_uint<1>> n_ic_w_req;
   sc_signal<sc_uint<1>> n_ic_l_req;
-  
+
   Output_Channel* n_oc;
   sc_signal<sc_uint<32>> n_oc_data0;
   sc_signal<sc_uint<32>> n_oc_data1;
@@ -97,7 +97,7 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> s_ic_e_req;
   sc_signal<sc_uint<1>> s_ic_w_req;
   sc_signal<sc_uint<1>> s_ic_l_req;
- 
+
   Output_Channel* s_oc;
   sc_signal<sc_uint<32>> s_oc_data0;
   sc_signal<sc_uint<32>> s_oc_data1;
@@ -119,7 +119,7 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> s_oc_out_val;
   sc_signal<sc_uint<1>> s_oc_out_ack;
 
-  Input_Channel* ic_e;  
+  Input_Channel* ic_e;
   sc_signal<sc_uint<32>> e_ic_data;
   sc_signal<sc_uint<1>> e_ic_val;
   sc_signal<sc_uint<1>> e_ic_ack;
@@ -137,7 +137,7 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> e_ic_e_req;
   sc_signal<sc_uint<1>> e_ic_w_req;
   sc_signal<sc_uint<1>> e_ic_l_req;
-  
+
   Output_Channel* e_oc;
   sc_signal<sc_uint<32>> e_oc_data0;
   sc_signal<sc_uint<32>> e_oc_data1;
@@ -160,8 +160,8 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> e_oc_out_ack;
 
 
-  
-  Input_Channel* w_ic;  
+
+  Input_Channel* w_ic;
   sc_signal<sc_uint<32>> w_ic_data;
   sc_signal<sc_uint<1>> w_ic_val;
   sc_signal<sc_uint<1>> w_ic_ack;
@@ -179,7 +179,7 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> w_ic_e_req;
   sc_signal<sc_uint<1>> w_ic_w_req;
   sc_signal<sc_uint<1>> w_ic_l_req;
-  
+
   Output_Channel* w_oc;
   sc_signal<sc_uint<32>> w_oc_data0;
   sc_signal<sc_uint<32>> w_oc_data1;
@@ -202,7 +202,7 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> w_oc_out_ack;
 
 
-  
+
   Input_Channel* l_ic;
   sc_signal<sc_uint<32>> l_ic_data;
   sc_signal<sc_uint<1>> l_ic_val;
@@ -221,7 +221,7 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> l_ic_e_req;
   sc_signal<sc_uint<1>> l_ic_w_req;
   sc_signal<sc_uint<1>> l_ic_l_req;
-  
+
   Output_Channel* l_oc;
   sc_signal<sc_uint<32>> l_oc_data0;
   sc_signal<sc_uint<32>> l_oc_data1;
@@ -343,7 +343,7 @@ SC_MODULE(Router) {
     l_ic->w_req(l_ic_w_req);
     l_ic->l_req(l_ic_l_req);
   }
-  
+
   void n_output_channels_ini(){
     n_oc->clock(clock);
     n_oc->data0(n_oc_data0);
@@ -454,14 +454,14 @@ SC_MODULE(Router) {
     l_oc->out_val(l_oc_out_val);
     l_oc->out_ack(l_oc_out_ack);
   }
-  
+
   void input_channels_ini() {
     n_input_channel_ini();
     s_input_channel_ini();
     e_input_channel_ini();
     w_input_channel_ini();
     l_input_channel_ini();
-    
+
   }
   void output_channels_ini() {
     n_output_channel_ini();
@@ -471,6 +471,28 @@ SC_MODULE(Router) {
     l_output_channel_ini();
   }
   void exec() {
+    /* North input channel */
+      //External connections
+      n_ic_data.write(north_data_in.read());
+      north_ack_in.write(n_ic_ack.read());
+      n_ic_val.write(north_val_in.read());
+      //Internal connections
+      s_oc_data0.write(north_data_out.read());
+      n_oc_req0.write(n_ic_n_req.read());
+      s_oc_req0.write(n_ic_s_req.read());
+      e_oc_req0.write(n_ic_e_req.read());
+      w_oc_req0.write(n_ic_w_req.read());
+      l_oc_req0.write(n_ic_l_req.read());
+      //FALTA ROK DE SAÍDA DO INPUT CHANNEL
+
+
+
+    /* North output channel */
+      //External connections
+      north_data_out.write(n_oc_data_out.read());
+      n_oc_out_ack.write(north_ack_out.read());
+      north_val_out.write(n_oc_out_val.read());
+
   }
 
   SC_CTOR(Router) {
