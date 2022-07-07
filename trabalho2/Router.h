@@ -7,7 +7,8 @@ SC_MODULE(Router) {
 
   sc_in<sc_uint<32>> north_data_in
   sc_out<sc_uint<32>> north_data_out;
-  Input_Channel* n_ic;
+  
+  Input_Channel* n_ic;  
   Output_Channel* n_oc;
 
   sc_in<sc_uint<32>> south_data_in
