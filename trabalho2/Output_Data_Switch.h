@@ -3,36 +3,31 @@
 SC_MODULE(Output_Data_Switch) {
   sc_in_clk clock; 
 
-  sc_in<sc_uint<32>> n_data;
-  sc_in<sc_uint<32>> s_data;
-  sc_in<sc_uint<32>> e_data;
-  sc_in<sc_uint<32>> w_data;
-  sc_in<sc_uint<32>> c_data;
+  sc_in<sc_uint<32>> data0;
+  sc_in<sc_uint<32>> data1;
+  sc_in<sc_uint<32>> data2;
+  sc_in<sc_uint<32>> data3;
 
 
   sc_out<sc_uint<32>> data_out;
   
-  sc_in<sc_uint<1>> north;
-  sc_in<sc_uint<1>> south;
-  sc_in<sc_uint<1>> east;
-  sc_in<sc_uint<1>> west;
-  sc_in<sc_uint<1>> core;
+  sc_in<sc_uint<1>> req0;
+  sc_in<sc_uint<1>> req1;
+  sc_in<sc_uint<1>> req2;
+  sc_in<sc_uint<1>> req3;
 
   void choose_out() {
-    if (north.read() == 1){
-      data_out.write(n_data);
+    if (req0.read() == 1){
+      data_out.write(data0);
     }
-    else if (south.read() == 1){
-      data_out.write(s_data);
+    else if (req1.read() == 1){
+      data_out.write(data1);
     }
-    else if (east.read() == 1){
-      data_out.write(e_data);
+    else if (data2.read() == 1){
+      data_out.write(data2);
     }
-    else if (west.read() == 1){
-      data_out.write(w_data);
-    }
-    else if (core.read() == 1){
-      data_out.write(c_data);
+    else if (req3.read() == 1){
+      data_out.write(data3);
     }
   }
     

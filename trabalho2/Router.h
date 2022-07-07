@@ -5,29 +5,43 @@ SC_MODULE(Router) {
 	sc_in_clk clock; 
 
 
-    sc_in<sc_uint<32>> north_router_in
-    sc_out<sc_uint<32>> north_router_out;
-  
-   // input channel
-  	sc_signal<sc_uint<32>> p_in;
-  	Input_Channel* n_ic;
+  sc_in<sc_uint<32>> north_data_in
+  sc_out<sc_uint<32>> north_data_out;
+  Input_Channel* n_ic;
+  Output_Channel* n_oc;
 
-    // output channel
-  	Output_Channel* n_oc;
+  sc_in<sc_uint<32>> south_data_in
+  sc_out<sc_uint<32>> south_data_out;
+  Input_Channel* s_ic;
+  Output_Channel* s_oc;
 
-  
-    void input_channel_ini() {
-      
+  sc_in<sc_uint<32>> east_data_in
+  sc_out<sc_uint<32>> east_data_out;
+  Input_Channel* e_ic;
+  Output_Channel* e_oc;
 
-    }
-  	void output_channel_ini() {
+  sc_in<sc_uint<32>> west_data_in
+  sc_out<sc_uint<32>> west_data_out;
+  Input_Channel* w_ic;
+  Output_Channel* w_oc;
 
-    }
+  sc_in<sc_uint<32>> local_data_in
+  sc_out<sc_uint<32>> local_data_out;
+  Input_Channel* l_ic;
+  Output_Channel* l_oc;
 
-    SC_CTOR(Router) {
-      SC_METHOD(input_channel_ini);
-        sensitive << clock.pos();
-      SC_METHOD(output_channel_ini);
-        sensitive << clock.neg();
-    }
+  void input_channel_ini() {
+    
+
+  }
+  void output_channel_ini() {
+
+  }
+
+  SC_CTOR(Router) {
+    input_channel_ini();
+    output_channel_ini();
+    SC_METHOD(exec);
+      sensitive << clock.pos();
+  }
 };
