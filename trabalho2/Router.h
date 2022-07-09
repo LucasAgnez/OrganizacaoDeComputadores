@@ -39,7 +39,7 @@ SC_MODULE(Router) {
   sc_in<sc_uint<1>> local_val_in;
   sc_out<sc_uint<1>> local_val_out;
 
-  Input_Channel* n_ic;
+  Input_Channel *n_ic;
   sc_signal<sc_uint<32>> n_ic_data;
   sc_signal<sc_uint<1>> n_ic_val;
   sc_signal<sc_uint<1>> n_ic_ack;
@@ -57,8 +57,9 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> n_ic_e_req;
   sc_signal<sc_uint<1>> n_ic_w_req;
   sc_signal<sc_uint<1>> n_ic_l_req;
+  sc_signal<sc_uint<1>> n_ic_rok;
 
-  Output_Channel* n_oc;
+  Output_Channel *n_oc;
   sc_signal<sc_uint<32>> n_oc_data0;
   sc_signal<sc_uint<32>> n_oc_data1;
   sc_signal<sc_uint<32>> n_oc_data2;
@@ -78,8 +79,9 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> n_oc_rok3;
   sc_signal<sc_uint<1>> n_oc_out_val;
   sc_signal<sc_uint<1>> n_oc_out_ack;
+  sc_signal<sc_uint<1>> n_oc_rd;
 
-  Input_Channel* s_ic;
+  Input_Channel *s_ic;
   sc_signal<sc_uint<32>> s_ic_data;
   sc_signal<sc_uint<1>> s_ic_val;
   sc_signal<sc_uint<1>> s_ic_ack;
@@ -97,8 +99,9 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> s_ic_e_req;
   sc_signal<sc_uint<1>> s_ic_w_req;
   sc_signal<sc_uint<1>> s_ic_l_req;
+  sc_signal<sc_uint<1>> s_ic_rok;
 
-  Output_Channel* s_oc;
+  Output_Channel *s_oc;
   sc_signal<sc_uint<32>> s_oc_data0;
   sc_signal<sc_uint<32>> s_oc_data1;
   sc_signal<sc_uint<32>> s_oc_data2;
@@ -118,8 +121,9 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> s_oc_rok3;
   sc_signal<sc_uint<1>> s_oc_out_val;
   sc_signal<sc_uint<1>> s_oc_out_ack;
+  sc_signal<sc_uint<1>> s_oc_rd;
 
-  Input_Channel* ic_e;
+  Input_Channel *e_ic;
   sc_signal<sc_uint<32>> e_ic_data;
   sc_signal<sc_uint<1>> e_ic_val;
   sc_signal<sc_uint<1>> e_ic_ack;
@@ -137,8 +141,9 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> e_ic_e_req;
   sc_signal<sc_uint<1>> e_ic_w_req;
   sc_signal<sc_uint<1>> e_ic_l_req;
+  sc_signal<sc_uint<1>> e_ic_rok;
 
-  Output_Channel* e_oc;
+  Output_Channel *e_oc;
   sc_signal<sc_uint<32>> e_oc_data0;
   sc_signal<sc_uint<32>> e_oc_data1;
   sc_signal<sc_uint<32>> e_oc_data2;
@@ -158,10 +163,9 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> e_oc_rok3;
   sc_signal<sc_uint<1>> e_oc_out_val;
   sc_signal<sc_uint<1>> e_oc_out_ack;
+  sc_signal<sc_uint<1>> e_oc_rd;
 
-
-
-  Input_Channel* w_ic;
+  Input_Channel *w_ic;
   sc_signal<sc_uint<32>> w_ic_data;
   sc_signal<sc_uint<1>> w_ic_val;
   sc_signal<sc_uint<1>> w_ic_ack;
@@ -179,8 +183,9 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> w_ic_e_req;
   sc_signal<sc_uint<1>> w_ic_w_req;
   sc_signal<sc_uint<1>> w_ic_l_req;
+  sc_signal<sc_uint<1>> w_ic_rok;
 
-  Output_Channel* w_oc;
+  Output_Channel *w_oc;
   sc_signal<sc_uint<32>> w_oc_data0;
   sc_signal<sc_uint<32>> w_oc_data1;
   sc_signal<sc_uint<32>> w_oc_data2;
@@ -200,10 +205,9 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> w_oc_rok3;
   sc_signal<sc_uint<1>> w_oc_out_val;
   sc_signal<sc_uint<1>> w_oc_out_ack;
+  sc_signal<sc_uint<1>> w_oc_rd;
 
-
-
-  Input_Channel* l_ic;
+  Input_Channel *l_ic;
   sc_signal<sc_uint<32>> l_ic_data;
   sc_signal<sc_uint<1>> l_ic_val;
   sc_signal<sc_uint<1>> l_ic_ack;
@@ -221,8 +225,9 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> l_ic_e_req;
   sc_signal<sc_uint<1>> l_ic_w_req;
   sc_signal<sc_uint<1>> l_ic_l_req;
+  sc_signal<sc_uint<1>> l_ic_rok;
 
-  Output_Channel* l_oc;
+  Output_Channel *l_oc;
   sc_signal<sc_uint<32>> l_oc_data0;
   sc_signal<sc_uint<32>> l_oc_data1;
   sc_signal<sc_uint<32>> l_oc_data2;
@@ -242,8 +247,9 @@ SC_MODULE(Router) {
   sc_signal<sc_uint<1>> l_oc_rok3;
   sc_signal<sc_uint<1>> l_oc_out_val;
   sc_signal<sc_uint<1>> l_oc_out_ack;
+  sc_signal<sc_uint<1>> l_oc_rd;
 
-  void n_input_channels_ini(){
+  void n_input_channel_ini() {
     n_ic->clock(clock);
     n_ic->data(n_ic_data);
     n_ic->val(n_ic_val);
@@ -262,8 +268,9 @@ SC_MODULE(Router) {
     n_ic->e_req(n_ic_e_req);
     n_ic->w_req(n_ic_w_req);
     n_ic->l_req(n_ic_l_req);
+    n_ic->rok(n_ic_rok);
   }
-  void s_input_channels_ini(){
+  void s_input_channel_ini() {
     s_ic->clock(clock);
     s_ic->data(s_ic_data);
     s_ic->val(s_ic_val);
@@ -282,8 +289,9 @@ SC_MODULE(Router) {
     s_ic->e_req(s_ic_e_req);
     s_ic->w_req(s_ic_w_req);
     s_ic->l_req(s_ic_l_req);
+    s_ic->rok(s_ic_rok);
   }
-  void e_input_channels_ini(){
+  void e_input_channel_ini() {
     e_ic->clock(clock);
     e_ic->data(e_ic_data);
     e_ic->val(e_ic_val);
@@ -302,8 +310,9 @@ SC_MODULE(Router) {
     e_ic->e_req(e_ic_e_req);
     e_ic->w_req(e_ic_w_req);
     e_ic->l_req(e_ic_l_req);
+    e_ic->rok(e_ic_rok);
   }
-  void w_input_channels_ini(){
+  void w_input_channel_ini() {
     w_ic->clock(clock);
     w_ic->data(w_ic_data);
     w_ic->val(w_ic_val);
@@ -322,8 +331,9 @@ SC_MODULE(Router) {
     w_ic->e_req(w_ic_e_req);
     w_ic->w_req(w_ic_w_req);
     w_ic->l_req(w_ic_l_req);
+    w_ic->rok(w_ic_rok);
   }
-  void l_input_channels_ini(){
+  void l_input_channel_ini() {
     l_ic->clock(clock);
     l_ic->data(l_ic_data);
     l_ic->val(l_ic_val);
@@ -342,9 +352,10 @@ SC_MODULE(Router) {
     l_ic->e_req(l_ic_e_req);
     l_ic->w_req(l_ic_w_req);
     l_ic->l_req(l_ic_l_req);
+    l_ic->rok(l_ic_rok);
   }
 
-  void n_output_channels_ini(){
+  void n_output_channel_ini() {
     n_oc->clock(clock);
     n_oc->data0(n_oc_data0);
     n_oc->data1(n_oc_data1);
@@ -365,8 +376,9 @@ SC_MODULE(Router) {
     n_oc->rok3(n_oc_rok3);
     n_oc->out_val(n_oc_out_val);
     n_oc->out_ack(n_oc_out_ack);
+    n_oc->rd(n_oc_rd);
   }
-  void s_output_channels_ini(){
+  void s_output_channel_ini() {
     s_oc->clock(clock);
     s_oc->data0(s_oc_data0);
     s_oc->data1(s_oc_data1);
@@ -387,8 +399,9 @@ SC_MODULE(Router) {
     s_oc->rok3(s_oc_rok3);
     s_oc->out_val(s_oc_out_val);
     s_oc->out_ack(s_oc_out_ack);
+    s_oc->rd(s_oc_rd);
   }
-  void e_output_channels_ini(){
+  void e_output_channel_ini() {
     e_oc->clock(clock);
     e_oc->data0(e_oc_data0);
     e_oc->data1(e_oc_data1);
@@ -409,8 +422,9 @@ SC_MODULE(Router) {
     e_oc->rok3(e_oc_rok3);
     e_oc->out_val(e_oc_out_val);
     e_oc->out_ack(e_oc_out_ack);
+    e_oc->rd(e_oc_rd);
   }
-  void w_output_channels_ini(){
+  void w_output_channel_ini() {
     w_oc->clock(clock);
     w_oc->data0(w_oc_data0);
     w_oc->data1(w_oc_data1);
@@ -431,8 +445,9 @@ SC_MODULE(Router) {
     w_oc->rok3(w_oc_rok3);
     w_oc->out_val(w_oc_out_val);
     w_oc->out_ack(w_oc_out_ack);
+    w_oc->rd(w_oc_rd);
   }
-  void l_output_channels_ini(){
+  void l_output_channel_ini() {
     l_oc->clock(clock);
     l_oc->data0(l_oc_data0);
     l_oc->data1(l_oc_data1);
@@ -453,6 +468,7 @@ SC_MODULE(Router) {
     l_oc->rok3(l_oc_rok3);
     l_oc->out_val(l_oc_out_val);
     l_oc->out_ack(l_oc_out_ack);
+    l_oc->rd(l_oc_rd);
   }
 
   void input_channels_ini() {
@@ -461,7 +477,6 @@ SC_MODULE(Router) {
     e_input_channel_ini();
     w_input_channel_ini();
     l_input_channel_ini();
-
   }
   void output_channels_ini() {
     n_output_channel_ini();
@@ -471,34 +486,197 @@ SC_MODULE(Router) {
     l_output_channel_ini();
   }
   void exec() {
-    /* North input channel */
-      //External connections
-      n_ic_data.write(north_data_in.read());
-      north_ack_in.write(n_ic_ack.read());
-      n_ic_val.write(north_val_in.read());
-      //Internal connections
-      s_oc_data0.write(north_data_out.read());
-      n_oc_req0.write(n_ic_n_req.read());
-      s_oc_req0.write(n_ic_s_req.read());
-      e_oc_req0.write(n_ic_e_req.read());
-      w_oc_req0.write(n_ic_w_req.read());
-      l_oc_req0.write(n_ic_l_req.read());
-      //FALTA ROK DE SAÍDA DO INPUT CHANNEL
-
-
-
+    
+        /* North input channel */
+    n_ic_data.write(north_data_in.read());
+    north_ack_in.write(n_ic_ack.read());
+    n_ic_val.write(north_val_in.read());
+    // north ic rd
+    n_ic_rd0.write(s_oc_rd.read());
+    n_ic_rd1.write(e_oc_rd.read());
+    n_ic_rd2.write(w_oc_rd.read());
+    n_ic_rd3.write(l_oc_rd.read());
+    // north ic gnt
+    n_ic_gnt0.write(s_oc_gnt3.read());
+    n_ic_gnt1.write(e_oc_gnt2.read());
+    n_ic_gnt2.write(w_oc_gnt1.read());
+    n_ic_gnt3.write(l_oc_gnt0.read());
     /* North output channel */
-      //External connections
-      north_data_out.write(n_oc_data_out.read());
-      n_oc_out_ack.write(north_ack_out.read());
-      north_val_out.write(n_oc_out_val.read());
+    north_data_out.write(n_oc_data_out.read());
+    n_oc_out_ack.write(north_ack_out.read());
+    north_val_out.write(n_oc_out_val.read());
+    // north oc rok
+    n_oc_rok0.write(s_ic_rok.read());
+    n_oc_rok1.write(e_ic_rok.read());
+    n_oc_rok2.write(w_ic_rok.read());
+    n_oc_rok3.write(l_ic_rok.read());
+    // north oc req
+    n_oc_req0.write(s_ic_n_req.read());
+    n_oc_req1.write(e_ic_n_req.read());
+    n_oc_req2.write(w_ic_n_req.read());
+    n_oc_req3.write(l_ic_n_req.read());
+    // north oc data
+    n_oc_data0.write(south_data_out.read());
+    n_oc_data1.write(east_data_out.read());
+    n_oc_data2.write(west_data_out.read());
+    n_oc_data3.write(local_data_out.read());
 
+    
+        /* South input channel */
+    s_ic_data.write(south_data_in.read());
+    south_ack_in.write(s_ic_ack.read());
+    s_ic_val.write(south_val_in.read());
+    // south ic rd
+    s_ic_rd0.write(e_oc_rd.read());
+    s_ic_rd1.write(w_oc_rd.read());
+    s_ic_rd2.write(l_oc_rd.read());
+    s_ic_rd3.write(n_oc_rd.read());
+    // south ic gnt
+    s_ic_gnt0.write(e_oc_gnt3.read());
+    s_ic_gnt1.write(w_oc_gnt2.read());
+    s_ic_gnt2.write(l_oc_gnt1.read());
+    s_ic_gnt3.write(n_oc_gnt0.read());
+    /* South output channel */
+    south_data_out.write(s_oc_data_out.read());
+    s_oc_out_ack.write(south_ack_out.read());
+    south_val_out.write(s_oc_out_val.read());
+    // south oc rok
+    s_oc_rok0.write(e_ic_rok.read());
+    s_oc_rok1.write(w_ic_rok.read());
+    s_oc_rok2.write(l_ic_rok.read());
+    s_oc_rok3.write(n_ic_rok.read());
+    // south oc req
+    s_oc_req0.write(e_ic_s_req.read());
+    s_oc_req1.write(w_ic_s_req.read());
+    s_oc_req2.write(l_ic_s_req.read());
+    s_oc_req3.write(n_ic_s_req.read());
+    // south oc data
+    s_oc_data0.write(east_data_out.read());
+    s_oc_data1.write(west_data_out.read());
+    s_oc_data2.write(local_data_out.read());
+    s_oc_data3.write(north_data_out.read());
+
+
+        /* East input channel */
+    e_ic_data.write(east_data_in.read());
+    east_ack_in.write(e_ic_ack.read());
+    e_ic_val.write(east_val_in.read());
+    // east ic rd
+    e_ic_rd0.write(w_oc_rd.read());
+    e_ic_rd1.write(l_oc_rd.read());
+    e_ic_rd2.write(n_oc_rd.read());
+    e_ic_rd3.write(s_oc_rd.read());
+    // east ic gnt
+    e_ic_gnt0.write(w_oc_gnt3.read());
+    e_ic_gnt1.write(l_oc_gnt2.read());
+    e_ic_gnt2.write(n_oc_gnt1.read());
+    e_ic_gnt3.write(s_oc_gnt0.read());
+    /* East output channel */
+    east_data_out.write(e_oc_data_out.read());
+    e_oc_out_ack.write(east_ack_out.read());
+    east_val_out.write(e_oc_out_val.read());
+    // east oc rok
+    e_oc_rok0.write(w_ic_rok.read());
+    e_oc_rok1.write(l_ic_rok.read());
+    e_oc_rok2.write(n_ic_rok.read());
+    e_oc_rok3.write(s_ic_rok.read());
+    // east oc req
+    e_oc_req0.write(w_ic_e_req.read());
+    e_oc_req1.write(l_ic_e_req.read());
+    e_oc_req2.write(n_ic_e_req.read());
+    e_oc_req3.write(s_ic_e_req.read());
+    // east oc data
+    e_oc_data0.write(west_data_out.read());
+    e_oc_data1.write(local_data_out.read());
+    e_oc_data2.write(north_data_out.read());
+    e_oc_data3.write(south_data_out.read());
+
+
+        /* West input channel */
+    w_ic_data.write(west_data_in.read());
+    west_ack_in.write(w_ic_ack.read());
+    w_ic_val.write(west_val_in.read());
+    // west ic rd
+    w_ic_rd0.write(l_oc_rd.read());
+    w_ic_rd1.write(n_oc_rd.read());
+    w_ic_rd2.write(s_oc_rd.read());
+    w_ic_rd3.write(e_oc_rd.read());
+    // west ic gnt
+    w_ic_gnt0.write(l_oc_gnt3.read());
+    w_ic_gnt1.write(n_oc_gnt2.read());
+    w_ic_gnt2.write(s_oc_gnt1.read());
+    w_ic_gnt3.write(e_oc_gnt0.read());
+    /* West output channel */
+    west_data_out.write(w_oc_data_out.read());
+    w_oc_out_ack.write(west_ack_out.read());
+    west_val_out.write(w_oc_out_val.read());
+    // west oc rok
+    w_oc_rok0.write(l_ic_rok.read());
+    w_oc_rok1.write(n_ic_rok.read());
+    w_oc_rok2.write(s_ic_rok.read());
+    w_oc_rok3.write(e_ic_rok.read());
+    // west oc req
+    w_oc_req0.write(l_ic_w_req.read());
+    w_oc_req1.write(n_ic_w_req.read());
+    w_oc_req2.write(s_ic_w_req.read());
+    w_oc_req3.write(e_ic_w_req.read());
+    // west oc data
+    w_oc_data0.write(local_data_out.read());
+    w_oc_data1.write(north_data_out.read());
+    w_oc_data2.write(south_data_out.read());
+    w_oc_data3.write(east_data_out.read());
+
+
+        /* Local input channel */
+    l_ic_data.write(local_data_in.read());
+    local_ack_in.write(l_ic_ack.read());
+    l_ic_val.write(local_val_in.read());
+    // local ic rd
+    l_ic_rd0.write(n_oc_rd.read());
+    l_ic_rd1.write(s_oc_rd.read());
+    l_ic_rd2.write(e_oc_rd.read());
+    l_ic_rd3.write(w_oc_rd.read());
+    // local ic gnt
+    l_ic_gnt0.write(n_oc_gnt3.read());
+    l_ic_gnt1.write(s_oc_gnt2.read());
+    l_ic_gnt2.write(e_oc_gnt1.read());
+    l_ic_gnt3.write(w_oc_gnt0.read());
+    /* Local output channel */
+    local_data_out.write(l_oc_data_out.read());
+    l_oc_out_ack.write(local_ack_out.read());
+    local_val_out.write(l_oc_out_val.read());
+    // local oc rok
+    l_oc_rok0.write(n_ic_rok.read());
+    l_oc_rok1.write(s_ic_rok.read());
+    l_oc_rok2.write(e_ic_rok.read());
+    l_oc_rok3.write(w_ic_rok.read());
+    // local oc req
+    l_oc_req0.write(n_ic_l_req.read());
+    l_oc_req1.write(s_ic_l_req.read());
+    l_oc_req2.write(e_ic_l_req.read());
+    l_oc_req3.write(w_ic_l_req.read());
+    // local oc data
+    l_oc_data0.write(north_data_out.read());
+    l_oc_data1.write(south_data_out.read());
+    l_oc_data2.write(east_data_out.read());
+    l_oc_data3.write(west_data_out.read());
+    
   }
 
   SC_CTOR(Router) {
+    n_ic = new Input_Channel("N_Input_Channel");
+    n_oc = new Output_Channel("N_Output_Channel");
+    s_ic = new Input_Channel("S_Input_Channel");
+    s_oc = new Output_Channel("S_Output_Channel");
+    e_ic = new Input_Channel("E_Input_Channel");
+    e_oc = new Output_Channel("E_Output_Channel");
+    w_ic = new Input_Channel("W_Input_Channel");
+    w_oc = new Output_Channel("W_Output_Channel");
+    l_ic = new Input_Channel("L_Input_Channel");
+    l_oc = new Output_Channel("L_Output_Channel");
     input_channels_ini();
     output_channels_ini();
     SC_METHOD(exec);
-      sensitive << clock.pos();
+    sensitive << clock.pos();
   }
 };

@@ -24,6 +24,8 @@ SC_MODULE(Output_Channel) {
   sc_out<sc_uint<1>> gnt2;
   sc_out<sc_uint<1>> gnt3;
 
+  sc_out<sc_uint<1>> rd;
+
   sc_in<sc_uint<1>> rok0;
   sc_in<sc_uint<1>> rok1;
   sc_in<sc_uint<1>> rok2;
@@ -162,9 +164,14 @@ SC_MODULE(Output_Channel) {
     output_flow_ctr_rok.write(output_write_switch_rok.read());
     output_flow_ctr_out_ack.write(out_ack.read());
     out_val.write(output_flow_ctr_out_val.read());
+    rd.write(output_flow_ctr_rd.read());
   }
 
   SC_CTOR(Output_Channel) {
+    output_ctr = new Output_Ctr("Output_Ctr");
+    output_data_switch = new Output_Data_Switch("Output_Data_Switch");
+    output_flow_ctr = new Output_Flow_Ctr("Output_Flow_Ctr");
+    output_write_switch = new Output_Write_Switch ("Output_Write_Switch");
     output_channel_ini();
     SC_METHOD(exec);
       sensitive << clock.pos();

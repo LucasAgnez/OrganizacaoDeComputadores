@@ -14,6 +14,8 @@ SC_MODULE(Input_Channel) {
   
   sc_out<sc_uint<32>> data_out;
 
+  sc_out<sc_uint<1>> rok;
+  
   sc_in<sc_uint<1>> gnt0;
   sc_in<sc_uint<1>> gnt1;
   sc_in<sc_uint<1>> gnt2;
@@ -38,7 +40,7 @@ SC_MODULE(Input_Channel) {
   sc_signal<sc_uint<1>> ic_s_req;
   sc_signal<sc_uint<1>> ic_e_req;
   sc_signal<sc_uint<1>> ic_w_req;
-  sc_signal<sc_uint<1>> ic_c_req;
+  sc_signal<sc_uint<1>> ic_l_req;
   
   Input_Buffer* input_buffer;
   sc_signal<sc_uint<32>> ib_data_in;
@@ -75,7 +77,7 @@ SC_MODULE(Input_Channel) {
     input_ctr->s_req(ic_s_req);
     input_ctr->e_req(ic_e_req);
     input_ctr->w_req(ic_w_req);
-    input_ctr->c_req(ic_c_req);
+    input_ctr->l_req(ic_l_req);
   }
   
   void input_buffer_ini() {
@@ -123,6 +125,7 @@ SC_MODULE(Input_Channel) {
     ib_wr.write(ifc_wr.read());
     ib_data_in.write(data.read());
     ib_rd.write(irs_rd.read());
+    rok.write(ib_rok);
    
     //IC connections
     ic_data_in.write(ib_data_out.read());
@@ -132,7 +135,7 @@ SC_MODULE(Input_Channel) {
     s_req.write(ic_s_req.read());
     e_req.write(ic_e_req.read());
     w_req.write(ic_w_req.read());
-    l_req.write(ic_c_req.read());
+    l_req.write(ic_l_req.read());
 
     //IRS connections
     irs_gnt0.write(gnt0.read());
@@ -145,6 +148,10 @@ SC_MODULE(Input_Channel) {
     irs_rd3.write(rd3.read());
   }
   SC_CTOR(Input_Channel) {
+    input_ctr = new Input_Ctr("Input_Ctr");
+    input_buffer = new Input_Buffer("Input_Buffer");
+    input_flow_ctr = new Input_Flow_Ctr("Input_Flow_Ctr");
+    input_read_switch = new Input_Read_Switch("Input_Read_Switch");
     input_channel_ini();
     SC_METHOD(exec);
       sensitive << clock.pos();

@@ -19,7 +19,7 @@ SC_MODULE(Input_Buffer) {
     if(full){
       wok.write(0);
       rok.write(1);
-      if(rd == 1){
+      if(rd.read() == 1){
         data_out.write(data);
         full = 0;
       }
@@ -27,7 +27,7 @@ SC_MODULE(Input_Buffer) {
     else{
       wok.write(1);
       rok.write(0);
-      if(wr == 1){
+      if(wr.read() == 1){
         data = data_in.read();
         full = 1;
       }

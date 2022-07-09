@@ -1,6 +1,5 @@
 #include "systemc.h"
 
-enum Estado{S0, S1, S2};
 
 SC_MODULE(Output_Flow_Ctr) {
   sc_in_clk clock; 

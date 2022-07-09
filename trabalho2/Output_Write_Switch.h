@@ -16,8 +16,8 @@ SC_MODULE(Output_Write_Switch) {
   sc_out<sc_uint<1>> rok;
   
   void exec() {
-    bool ok = ((gnt0==1 && rok0==1)|| (gnt1==1 && rok1==1) ||
-              (gnt2==1 && rok2==1)|| (gnt3==1 && rok3==1));
+    bool ok = ((gnt0.read()==1 && rok0.read()==1)|| (gnt1.read()==1 && rok1.read()==1) ||
+              (gnt2.read()==1 && rok2.read()==1)|| (gnt3.read()==1 && rok3.read()==1));
     if(ok){
       rok.write(1);
     } else{

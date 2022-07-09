@@ -16,8 +16,8 @@ SC_MODULE(Input_Read_Switch) {
   sc_out<sc_uint<1>> rd;
 
   void exec() {
-    bool ok = ((gnt0==1 && rd0==1)|| (gnt1==1 && rd1==1) ||
-              (gnt2==1 && rd2==1)|| (gnt3==1 && rd3==1));
+    bool ok = ((gnt0.read()==1 && rd0.read()==1)|| (gnt1.read()==1 && rd1.read()==1) ||
+              (gnt2.read()==1 && rd2.read()==1)|| (gnt3.read()==1 && rd3.read()==1));
     if(ok){
       rd.write(1);
     } else{

@@ -12,7 +12,7 @@ SC_MODULE(Input_Ctr) {
   sc_out<sc_uint<1>> s_req;
   sc_out<sc_uint<1>> e_req;
   sc_out<sc_uint<1>> w_req;
-  sc_out<sc_uint<1>> c_req;
+  sc_out<sc_uint<1>> l_req;
 
   void routing() {
     sc_uint<2> X;
@@ -30,14 +30,14 @@ SC_MODULE(Input_Ctr) {
         s_req.write(0);
         e_req.write(1);
         w_req.write(0);
-        c_req.write(0);
+        l_req.write(0);
       }
       else if(left_right == 1){
         n_req.write(0);
         s_req.write(0);
         e_req.write(0);
         w_req.write(1);
-        c_req.write(0);
+        l_req.write(0);
       }
     }
     else if(Y>0){
@@ -47,14 +47,14 @@ SC_MODULE(Input_Ctr) {
         s_req.write(1);
         e_req.write(0);
         w_req.write(0);
-        c_req.write(0);
+        l_req.write(0);
       }
       else if(up_down == 1){
         n_req.write(1);
         s_req.write(0);
         e_req.write(0);
         w_req.write(0);
-        c_req.write(0);
+        l_req.write(0);
       }
     }
     else{
@@ -62,9 +62,9 @@ SC_MODULE(Input_Ctr) {
       s_req.write(0);
       e_req.write(0);
       w_req.write(0);
-      c_req.write(1);
+      l_req.write(1);
     }
-    if(rok == 1){
+    if(rok.read() == 1){
       sc_uint<6> new_header;
       new_header = (X<<4) + (left_right<<3) + (Y<<1) + up_down;
       sc_uint<32> new_data = data_in.read() << 6;
