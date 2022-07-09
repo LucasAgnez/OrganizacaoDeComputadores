@@ -516,10 +516,10 @@ SC_MODULE(Router) {
     n_oc_req2.write(w_ic_n_req.read());
     n_oc_req3.write(l_ic_n_req.read());
     // north oc data
-    n_oc_data0.write(south_data_out.read());
-    n_oc_data1.write(east_data_out.read());
-    n_oc_data2.write(west_data_out.read());
-    n_oc_data3.write(local_data_out.read());
+    n_oc_data0.write(s_ic_data_out.read());
+    n_oc_data1.write(e_ic_data_out.read());
+    n_oc_data2.write(w_ic_data_out.read());
+    n_oc_data3.write(l_ic_data_out.read());
 
     
         /* South input channel */
@@ -551,10 +551,10 @@ SC_MODULE(Router) {
     s_oc_req2.write(l_ic_s_req.read());
     s_oc_req3.write(n_ic_s_req.read());
     // south oc data
-    s_oc_data0.write(east_data_out.read());
-    s_oc_data1.write(west_data_out.read());
-    s_oc_data2.write(local_data_out.read());
-    s_oc_data3.write(north_data_out.read());
+    s_oc_data0.write(e_ic_data_out.read());
+    s_oc_data1.write(w_ic_data_out.read());
+    s_oc_data2.write(l_ic_data_out.read());
+    s_oc_data3.write(n_ic_data_out.read());
 
 
         /* East input channel */
@@ -586,10 +586,10 @@ SC_MODULE(Router) {
     e_oc_req2.write(n_ic_e_req.read());
     e_oc_req3.write(s_ic_e_req.read());
     // east oc data
-    e_oc_data0.write(west_data_out.read());
-    e_oc_data1.write(local_data_out.read());
-    e_oc_data2.write(north_data_out.read());
-    e_oc_data3.write(south_data_out.read());
+    e_oc_data0.write(w_ic_data_out.read());
+    e_oc_data1.write(l_ic_data_out.read());
+    e_oc_data2.write(n_ic_data_out.read());
+    e_oc_data3.write(s_ic_data_out.read());
 
 
         /* West input channel */
@@ -621,10 +621,10 @@ SC_MODULE(Router) {
     w_oc_req2.write(s_ic_w_req.read());
     w_oc_req3.write(e_ic_w_req.read());
     // west oc data
-    w_oc_data0.write(local_data_out.read());
-    w_oc_data1.write(north_data_out.read());
-    w_oc_data2.write(south_data_out.read());
-    w_oc_data3.write(east_data_out.read());
+    w_oc_data0.write(l_ic_data_out.read());
+    w_oc_data1.write(n_ic_data_out.read());
+    w_oc_data2.write(s_ic_data_out.read());
+    w_oc_data3.write(e_ic_data_out.read());
 
 
         /* Local input channel */
@@ -656,10 +656,10 @@ SC_MODULE(Router) {
     l_oc_req2.write(e_ic_l_req.read());
     l_oc_req3.write(w_ic_l_req.read());
     // local oc data
-    l_oc_data0.write(north_data_out.read());
-    l_oc_data1.write(south_data_out.read());
-    l_oc_data2.write(east_data_out.read());
-    l_oc_data3.write(west_data_out.read());
+    l_oc_data0.write(n_ic_data_out.read());
+    l_oc_data1.write(s_ic_data_out.read());
+    l_oc_data2.write(e_ic_data_out.read());
+    l_oc_data3.write(w_ic_data_out.read());
     
   }
 

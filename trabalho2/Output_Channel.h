@@ -74,7 +74,7 @@ SC_MODULE(Output_Channel) {
   sc_signal<sc_uint<1>> output_write_switch_rok1;
   sc_signal<sc_uint<1>> output_write_switch_rok2;
   sc_signal<sc_uint<1>> output_write_switch_rok3;
-  sc_out<sc_uint<1>> output_write_switch_rok;
+  sc_signal<sc_uint<1>> output_write_switch_rok;
 
   void output_ctr_ini(){
     output_ctr->clock(clock);
