@@ -17,23 +17,32 @@ SC_MODULE(Output_Data_Switch) {
   sc_in<sc_uint<1>> req3;
 
   void choose_out() {
+    std::cout << "ODS data0: " << data0.read() << std::endl;
+    std::cout << "ODS data1: " << data1.read() << std::endl;
+    std::cout << "ODS data2: " << data2.read() << std::endl;
+    std::cout << "ODS data3: " << data3.read() << std::endl;
+    std::cout << "ODS req0: " << req0.read() << std::endl;
+    std::cout << "ODS req1: " << req1.read() << std::endl;
+    std::cout << "ODS req2: " << req2.read() << std::endl;
+    std::cout << "ODS req3: " << req3.read() << std::endl;
     if (req0.read() == 1){
-      data_out.write(data0);
+      data_out.write(data0.read());
     }
     else if (req1.read() == 1){
-      data_out.write(data1);
+      data_out.write(data1.read());
     }
-    else if (data2.read() == 1){
-      data_out.write(data2);
+    else if (req2.read() == 1){
+      data_out.write(data2.read());
     }
     else if (req3.read() == 1){
-      data_out.write(data3);
+      data_out.write(data3.read());
     }
+    std::cout << "ODS data out: " << data_out.read() << std::endl;
   }
     
 
   SC_CTOR(Output_Data_Switch) {
     SC_METHOD(choose_out);
-      sensitive << clock.pos();
+      sensitive << data0 << data1 << data2 << data3 << req0 << req1 << req2 << req3;
   }
 };

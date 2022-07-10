@@ -32,6 +32,20 @@ SC_MODULE(Input_Channel) {
   sc_out<sc_uint<1>> w_req;
   sc_out<sc_uint<1>> l_req;
 
+  Input_Flow_Ctr* input_flow_ctr;
+  sc_signal<sc_uint<1>> ifc_val;
+  sc_signal<sc_uint<1>> ifc_ack;
+  sc_signal<sc_uint<1>> ifc_wok;
+  sc_signal<sc_uint<1>> ifc_wr;
+  
+  Input_Buffer* input_buffer;
+  sc_signal<sc_uint<32>> ib_data_in;
+  sc_signal<sc_uint<32>> ib_data_out;
+  sc_signal<sc_uint<1>> ib_wr;
+  sc_signal<sc_uint<1>> ib_wok;
+  sc_signal<sc_uint<1>> ib_rd;
+  sc_signal<sc_uint<1>> ib_rok;
+  
   Input_Ctr* input_ctr;
   sc_signal<sc_uint<32>> ic_data_in;
   sc_signal<sc_uint<32>> ic_data_out;
@@ -41,21 +55,6 @@ SC_MODULE(Input_Channel) {
   sc_signal<sc_uint<1>> ic_e_req;
   sc_signal<sc_uint<1>> ic_w_req;
   sc_signal<sc_uint<1>> ic_l_req;
-  
-  Input_Buffer* input_buffer;
-  sc_signal<sc_uint<32>> ib_data_in;
-  sc_signal<sc_uint<32>> ib_data_out;
-  sc_signal<sc_uint<1>> ib_wr;
-  sc_signal<sc_uint<1>> ib_wok;
-  sc_signal<sc_uint<1>> ib_rd;
-  sc_signal<sc_uint<1>> ib_rok;
-
-  Input_Flow_Ctr* input_flow_ctr;
-  sc_signal<sc_uint<1>> ifc_val;
-  sc_signal<sc_uint<1>> ifc_ack;
-  sc_signal<sc_uint<1>> ifc_wok;
-  sc_signal<sc_uint<1>> ifc_wr;
-
   
   Input_Read_Switch* input_read_switch;
   sc_signal<sc_uint<1>> irs_gnt0;
@@ -110,9 +109,9 @@ SC_MODULE(Input_Channel) {
   }
 
   void input_channel_ini() {
-    input_ctr_ini();
-    input_buffer_ini();
     input_flow_ctr_ini();
+    input_buffer_ini();
+    input_ctr_ini();
     input_read_switch_ini();
   }
   void exec() {
@@ -148,9 +147,9 @@ SC_MODULE(Input_Channel) {
     irs_rd3.write(rd3.read());
   }
   SC_CTOR(Input_Channel) {
-    input_ctr = new Input_Ctr("Input_Ctr");
-    input_buffer = new Input_Buffer("Input_Buffer");
     input_flow_ctr = new Input_Flow_Ctr("Input_Flow_Ctr");
+    input_buffer = new Input_Buffer("Input_Buffer");
+    input_ctr = new Input_Ctr("Input_Ctr");
     input_read_switch = new Input_Read_Switch("Input_Read_Switch");
     input_channel_ini();
     SC_METHOD(exec);

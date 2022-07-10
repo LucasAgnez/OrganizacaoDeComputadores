@@ -27,6 +27,6 @@ SC_MODULE(Output_Write_Switch) {
 
   SC_CTOR(Output_Write_Switch) {
     SC_METHOD(exec);
-      sensitive << clock.pos();
+      sensitive << gnt0 << gnt1 << gnt2 << gnt3 << rok0 << rok1 << rok2 << rok3;
   }
 };

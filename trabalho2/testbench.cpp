@@ -4,10 +4,8 @@
 
 int sc_main (int argc, char* argv[]) {
 	sc_signal<bool> clock;
-	
-  Router router("Router");
-  //a execucao nao passa daqui
 
+  Router router("Router");
   sc_signal<sc_uint<32>> router_north_data_in;
   sc_signal<sc_uint<32>> router_north_data_out;
   sc_signal<sc_uint<1>> router_north_ack_in;
@@ -70,12 +68,33 @@ int sc_main (int argc, char* argv[]) {
   router.local_ack_out(router_local_ack_out);
   router.local_val_in(router_local_val_in);
   router.local_val_out(router_local_val_out);
+  
+    router_north_data_in.write(201326591); // tem que ir pro sul 1x
+   // router_south_data_in.write(1140850687); // tem q ir pro leste 1x
+   // router_local_data_in.write(1811939327); //tem q ir pro oeste 2x e dps pro
+      router_north_val_in.write(1);
+    //router_north_ack_out.write(1);
+    router_south_val_in.write(1);
+   // router_south_ack_out.write(1);
+   // router_east_val_in.write(1);
+    //router_east_ack_out.write(1);
+   // router_west_val_in.write(1);
+   // router_west_ack_out.write(1);
+   // router_local_val_in.write(1);
+   // router_local_ack_out.write(1);
 
-  for(int i = 0; i<10; i++) {
+  for(int i = 0; i<11; i++) {
     clock = 1;
     sc_start(100, SC_NS);
     clock = 0;
     sc_start(100, SC_NS);
+    std::cout << "-------------------------------------------------" << std::endl;
+      std::cout << "North data out: " << router_north_data_out.read() << std::endl;
+  std::cout << "South data out: " << router_south_data_out.read() << std::endl;
+  std::cout << "East data out: " << router_east_data_out.read() << std::endl;
+  std::cout << "West data out: " << router_west_data_out.read() << std::endl;
+  std::cout << "Local data out: " << router_local_data_out.read() << std::endl;
   }
-	return 0;
+
+  return 0;
 }

@@ -13,6 +13,9 @@ SC_MODULE(Output_Flow_Ctr) {
   Estado estado = S0;
 
   void exec() {
+    std::cout << "OFC out_ack: " << out_ack.read() << std::endl;
+    std::cout << "OFC rok: " << rok.read() << std::endl;
+
     switch(estado){
       case S0: {
         if(rok.read() == 1 && out_ack.read() == 0) {
