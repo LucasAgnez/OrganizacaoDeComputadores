@@ -44,6 +44,7 @@ SC_MODULE(Output_Channel) {
   sc_signal<sc_uint<1>> output_ctr_gnt1;
   sc_signal<sc_uint<1>> output_ctr_gnt2;
   sc_signal<sc_uint<1>> output_ctr_gnt3;
+  sc_signal<sc_uint<2>> output_ctr_eop;
 
   
   Output_Data_Switch* output_data_switch;
@@ -56,6 +57,7 @@ SC_MODULE(Output_Channel) {
   sc_signal<sc_uint<1>> output_data_switch_req1;
   sc_signal<sc_uint<1>> output_data_switch_req2;
   sc_signal<sc_uint<1>> output_data_switch_req3;
+  sc_signal<sc_uint<2>> output_data_switch_eop;
 
   
   Output_Flow_Ctr* output_flow_ctr;
@@ -63,6 +65,7 @@ SC_MODULE(Output_Channel) {
   sc_signal<sc_uint<1>> output_flow_ctr_out_ack;
   sc_signal<sc_uint<1>> output_flow_ctr_rok;
   sc_signal<sc_uint<1>> output_flow_ctr_rd;
+  
 
   
   Output_Write_Switch* output_write_switch;
@@ -87,6 +90,7 @@ SC_MODULE(Output_Channel) {
     output_ctr->gnt1(output_ctr_gnt1);
     output_ctr->gnt2(output_ctr_gnt2);
     output_ctr->gnt3(output_ctr_gnt3);
+    output_ctr->eop(output_ctr_eop);
   }
   void output_data_switch_ini(){
     output_data_switch->clock(clock);
@@ -99,6 +103,7 @@ SC_MODULE(Output_Channel) {
     output_data_switch->req1(output_data_switch_req1);
     output_data_switch->req2(output_data_switch_req2);
     output_data_switch->req3(output_data_switch_req3);
+    output_data_switch->eop(output_data_switch_eop);
   }
   void output_flow_ctr_ini(){
     output_flow_ctr->clock(clock);
@@ -144,6 +149,7 @@ SC_MODULE(Output_Channel) {
     gnt2.write(output_ctr_gnt2.read());
     gnt3.write(output_ctr_gnt3.read());
     output_ctr_rd.write(output_flow_ctr_rd.read());
+    output_ctr_eop.write(output_data_switch_eop.read());
     
     
     //OWS connections
