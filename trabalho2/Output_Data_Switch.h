@@ -11,6 +11,10 @@ SC_MODULE(Output_Data_Switch) {
 
   sc_out<sc_uint<32>> data_out;
   
+  sc_out<sc_uint<2>> eop;
+  
+  int eop_count = 0;
+  
   sc_in<sc_uint<1>> req0;
   sc_in<sc_uint<1>> req1;
   sc_in<sc_uint<1>> req2;
@@ -19,19 +23,24 @@ SC_MODULE(Output_Data_Switch) {
   void choose_out() {
     if (req0.read() == 1 && data0.read() != 0){
       data_out.write(data0.read());
+      eop_count++;
     }
     else if (req1.read() == 1 && data1.read() != 0){
       data_out.write(data1.read());
+      eop_count++;
     }
     else if (req2.read() == 1 && data2.read() != 0){
       data_out.write(data2.read());
+      eop_count++;
     }
     else if (req3.read() == 1 && data3.read() != 0){
       data_out.write(data3.read());
+      eop_count++;
     }
     else{
       data_out.write(0);
     }
+    eop.write(eop_count);
   }
     
 
