@@ -69,21 +69,22 @@ int sc_main (int argc, char* argv[]) {
   router.local_val_in(router_local_val_in);
   router.local_val_out(router_local_val_out);
   
-    router_north_data_in.write(201326591); // tem que ir pro sul 1x e retorna 67108863
-    router_south_data_in.write(1811932159); //tem q ir pro oeste 1x e sul 1x e retorna 738190335
-  	//router_east_data_in.write(738190335); // sul 1x e retorna 603972607
-    router_north_val_in.write(1);
-    router_north_ack_out.write(1);
-    router_south_val_in.write(1);
-    router_south_ack_out.write(1);
-    router_east_val_in.write(1);
-    router_east_ack_out.write(1);
-    router_west_val_in.write(1);
-    router_west_ack_out.write(1);
-    router_local_val_in.write(1);
-    router_local_ack_out.write(1);
+    
+  router_south_data_in.write(1811932159); //tem q ir pro oeste 1x e sul 1x e retorna 738190335
+  router_north_data_in.write(201326591); // tem que ir pro sul 1x e retorna 67108863
+  router_east_data_in.write(738190335); // sul 1x e retorna 603972607
+  router_north_val_in.write(1);
+  router_north_ack_out.write(1);
+  router_south_val_in.write(1);
+  router_south_ack_out.write(1);
+  router_east_val_in.write(1);
+  router_east_ack_out.write(1);
+  router_west_val_in.write(1);
+  router_west_ack_out.write(1);
+  router_local_val_in.write(1);
+  router_local_ack_out.write(1);
 
-  for(int i = 0; i<30; i++) {
+  for(int i = 0; i<14; i++) {
     clock = 1;
     sc_start(100, SC_NS);
     clock = 0;
