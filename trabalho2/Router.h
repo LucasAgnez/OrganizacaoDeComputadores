@@ -520,6 +520,7 @@ SC_MODULE(Router) {
     n_oc_data1.write(e_ic_data_out.read());
     n_oc_data2.write(w_ic_data_out.read());
     n_oc_data3.write(l_ic_data_out.read());
+    
 
     
         /* South input channel */
@@ -555,6 +556,7 @@ SC_MODULE(Router) {
     s_oc_data1.write(w_ic_data_out.read());
     s_oc_data2.write(l_ic_data_out.read());
     s_oc_data3.write(n_ic_data_out.read());
+    
 
 
         /* East input channel */
