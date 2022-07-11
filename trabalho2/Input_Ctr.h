@@ -23,50 +23,51 @@ SC_MODULE(Input_Ctr) {
     left_right = data_in.read() >> 29;
     Y = data_in.read() >> 27;
     up_down = data_in.read() >> 26;
-    if(X == 0 && Y == 0){
-      n_req.write(0);
-      s_req.write(0);
-      e_req.write(0);
-      w_req.write(0);
-      l_req.write(1);
-    }
-    else if(X>0){
-      X--;
-      if(left_right == 0){
-        n_req.write(0);
-        s_req.write(0);
-        e_req.write(1);
-        w_req.write(0);
-        l_req.write(0);
-      }
-      else if(left_right == 1){
+    if(data_in.read() != 0){
+		if(X == 0 && Y == 0){
         n_req.write(0);
         s_req.write(0);
         e_req.write(0);
-        w_req.write(1);
-        l_req.write(0);
+        w_req.write(0);
+        l_req.write(1);
+      }
+      else if(X>0){
+        X--;
+        if(left_right == 0){
+          n_req.write(0);
+          s_req.write(0);
+          e_req.write(1);
+          w_req.write(0);
+          l_req.write(0);
+        }
+        else if(left_right == 1){
+          n_req.write(0);
+          s_req.write(0);
+          e_req.write(0);
+          w_req.write(1);
+          l_req.write(0);
+        }
+      }
+      else if(Y>0){
+        Y--;
+        if(up_down == 0){
+          n_req.write(0);
+          s_req.write(1);
+          e_req.write(0);
+          w_req.write(0);
+          l_req.write(0);
+        }
+        else if(up_down == 1){
+          n_req.write(1);
+          s_req.write(0);
+          e_req.write(0);
+          w_req.write(0);
+          l_req.write(0);
+        }
       }
     }
-    else if(Y>0){
-      Y--;
-      if(up_down == 0){
-        n_req.write(0);
-        s_req.write(1);
-        e_req.write(0);
-        w_req.write(0);
-        l_req.write(0);
-      }
-      else if(up_down == 1){
-        n_req.write(1);
-        s_req.write(0);
-        e_req.write(0);
-        w_req.write(0);
-        l_req.write(0);
-      }
-    }
+
     if(rok.read() == 1){
-
-
       sc_uint<6> new_header;
       new_header = (X<<4) + (left_right<<3) + (Y<<1) + up_down;
       sc_uint<32> new_data = data_in.read() << 6;
