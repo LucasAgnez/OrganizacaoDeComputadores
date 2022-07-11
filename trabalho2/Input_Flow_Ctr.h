@@ -16,9 +16,6 @@ SC_MODULE(Input_Flow_Ctr) {
   void exec() {
     switch(estado){
       case S0: {
-        std::cout << "estado: " << estado << std::endl;
-        std::cout << "val: " << val.read() << std::endl;
-        std::cout << "wok: " << wok.read() << std::endl;
         if(val.read() == 1 && wok.read() == 1) {
           estado = S1;
           ack.write(1);
@@ -27,7 +24,6 @@ SC_MODULE(Input_Flow_Ctr) {
       }
       break;
       case S1: {
-        std::cout << "estado: " << estado << std::endl;
         if(val.read() == 0){
           estado = S0;
           ack.write(0);
@@ -41,7 +37,6 @@ SC_MODULE(Input_Flow_Ctr) {
       }
       break;
       case S2: {
-        std::cout << "estado: " << estado << std::endl;
         if(val.read() == 0){
           estado = S0;
           ack.write(0);
