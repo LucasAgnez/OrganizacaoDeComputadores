@@ -8,6 +8,8 @@ SC_MODULE(Output_Ctr) {
   sc_in<sc_uint<1>> req2;
   sc_in<sc_uint<1>> req3;
 
+  sc_in<sc_uint<2>> eop;
+  
   int last_req = 0;
 
   sc_in<sc_uint<1>> rd;
@@ -74,6 +76,6 @@ SC_MODULE(Output_Ctr) {
 
   SC_CTOR(Output_Ctr) {
     SC_METHOD(exec);
-      sensitive << req0 << req1 << req2 << req3 << rd;
+      sensitive << req0 << req1 << req2 << req3 << rd << eop;
   }
 };
