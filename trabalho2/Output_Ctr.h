@@ -47,7 +47,7 @@ SC_MODULE(Output_Ctr) {
         }
         break;
         case 2: {
-          if(req2.read() == 1) {
+          if(req2.read() == 1 ) {
             gnt0.write(0);
             gnt1.write(0);
             gnt2.write(1);
@@ -74,6 +74,6 @@ SC_MODULE(Output_Ctr) {
 
   SC_CTOR(Output_Ctr) {
     SC_METHOD(exec);
-      sensitive << clock.pos();
+      sensitive << req0 << req1 << req2 << req3 << rd;
   }
 };
